@@ -1,0 +1,836 @@
+`WFComponent` serves as the driving force behind xAtom's reactivity, enabling the transformation of Webflow elements into dynamic and interactive components. With `WFComponent`, you gain mastery over various aspects, including styling, text updates, attribute control, CSS classes, and event listeners (e.g. `onclick` and `onchange`). As the pivotal class within the xAtom framework, `WFComponent`, initiated by a selector query, propels your web development endeavors into dynamic realms. ✌️
+
+## Getting Started
+
+**Initialization**: To unlock the immense potential of `WFComponent` in your xAtom project, begin by creating a new `WFComponent` instance. Provide a valid selector as an argument to the class constructor. For instance:
+
+```typescript title="Example"
+import { WFComponent } from "@xatom/core";
+
+// Create a new WFComponent instance for the first element with the CSS class ".btn"
+const myComponent = new WFComponent(".btn");
+```
+
+**Control and Customize**: Once `myComponent` is initialized, you gain precise control over styling, text updates, attribute management, CSS classes, and event listeners for all elements matching the specified selector. Customize and fine-tune your `myComponent` to seamlessly align with your project's unique requirements.
+
+### Explore Additional Initialization Methods
+
+```typescript title="Additional Initialization Examples"
+// Initialize WFComponent using different selectors
+const buttonA = new WFComponent("#button");
+const buttonB = new WFComponent(".button");
+const buttonC = new WFComponent(`[xa-type="button"]`);
+const buttonD = new WFComponent(`.buttons > button`);
+// Benefit from TypeScript type support
+const container = new WFComponent<HTMLDivElement>(`.mydiv`);
+```
+
+These examples illustrate various methods to create `WFComponent` instances using different CSS selectors. The last example showcases how to leverage TypeScript type support when initializing `WFComponent` for specific Webflow elements. Feel free to explore these options to best suit your project's needs. 💡
+
+## Selector Parameter
+
+The `selector` parameter within `WFComponent` is versatile and can accept one of the following types:
+
+- A string that precisely matches a valid CSS selector.
+- An HTMLElement representing a specific element in the document.
+- An existing `WFComponent` instance.
+
+If the provided string is not a valid CSS selector, it will result in an exception. You can learn more about CSS selectors [here](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_selectors)
+
+```typescript title="Selector example"
+// Example: Initialize WFComponent with a CSS selector
+const myComponentBySelector = new WFComponent(".btn");
+
+// Example: Initialize WFComponent with an HTMLElement
+const myDiv = document.getElementById("myDiv");
+const myComponentByElement = new WFComponent(myDiv);
+
+// Example: Initialize WFComponent with an existing WFComponent instance
+const existingComponent = new WFComponent(".existing");
+const myComponentByInstance = new WFComponent(existingComponent);
+```
+
+This provides insights into the flexibility of the selector parameter, allowing developers to initialize WFComponent using various supported types, enhancing its adaptability in different scenarios. 🎯
+
+## Methods
+
+The `WFComponent` class offers a comprehensive set of properties and methods to empower your development journey:
+
+### `getElement()` {#get-element}
+
+Obtain the underlying HTML element linked to the `WFComponent` instance, granting you access to native HTML element APIs for extended functionality.
+
+```typescript title="Example"
+// Create a new WFComponent instance for a <div> element
+const container = new WFComponent<HTMLDivElement>(`.mydiv`);
+// Retrieve the associated HTML element
+const htmlElement = container.getElement();
+// Now, harness the full power of native HTML element APIs
+console.log(htmlElement);
+```
+
+**Syntax**
+
+```typescript
+getElement() : HTMLElement;
+```
+
+With `getElement()`, you can seamlessly integrate custom behavior into your web components beyond the scope of xAtom.
+
+---
+
+### `setAttribute(key,value)` {#set-attribute}
+
+Assign a specific attribute to the element by specifying the attribute key and its corresponding value.
+
+```typescript title="Example"
+// Create a new WFComponent instance for an input element
+const input = new WFComponent(`.myinput`);
+// Set a native HTML attribute as an example
+input.setAttribute("disabled", "disabled");
+// Define a custom attribute with a key and value
+input.setAttribute("xa-type", "my-btn");
+```
+
+**Syntax**
+
+```typescript
+setAttribute(key:string,value:string) : void;
+```
+
+#### Parameters {#set-attribute-parameter}
+
+| Name    | Type     | Description                           |
+| ------- | -------- | ------------------------------------- |
+| `key`   | `string` | The attribute key to be set.          |
+| `value` | `string` | The value to assign to the attribute. |
+
+---
+
+### `getAttribute(key)` {#get-attribute}
+
+Returns the value of the attribute with the specified key.
+
+```typescript title="Example"
+// Create a new WFComponent instance for an link element
+const link = new WFComponent(`.mylink`);
+// Get the value of the attribute
+const hrefValue = input.getAttribute("href");
+console.log(hrefValue);
+```
+
+**Syntax**
+
+```typescript
+getAttribute(key:string) : string;
+```
+
+#### Parameters {#get-attribute-parameter}
+
+| Name  | Type     | Description                    |
+| ----- | -------- | ------------------------------ |
+| `key` | `string` | The attribute key to retrieve. |
+
+---
+
+### `hasAttribute(key)` {#has-attribute}
+
+Checks if the element has the attribute with the specified key.
+
+```typescript title="Example"
+// Create a new WFComponent instance for an input element
+const input = new WFComponent(`.myinput`);
+// Check if the attribute is present
+const isDisabled = input.hasAttribute("disabled");
+console.log(isDisabled);
+```
+
+**Syntax**
+
+```typescript
+hasAttribute(key:string) : boolean;
+```
+
+#### Parameters {#has-attribute-parameter}
+
+| Name  | Type     | Description                 |
+| ----- | -------- | --------------------------- |
+| `key` | `string` | The attribute key to check. |
+
+---
+
+### `removeAttribute(key)` {#remove-attribute}
+
+Removes the attribute with the given key from the element.
+
+```typescript title="Example"
+// Create a new WFComponent instance for an input element
+const input = new WFComponent(`.myinput`);
+// Remove the attribute
+input.removeAttribute("disabled");
+```
+
+**Syntax**
+
+```typescript
+removeAttribute(key:string) : void;
+```
+
+#### Parameters {#remove-attribute-parameter}
+
+| Name  | Type     | Description                  |
+| ----- | -------- | ---------------------------- |
+| `key` | `string` | The attribute key to remove. |
+
+---
+
+### `getChildAsComponent(selector)` {#get-child-component}
+
+Returns the first matched child element under the current parent element as a WFComponent instance.
+
+```typescript title="Example"
+// Create a new WFComponent instance for a card component
+const card = new WFComponent(`.my-card`);
+// Create a new WFComponent instance for a link inside the card
+const cardLink = card.getChildAsComponent(`.my-link`);
+```
+
+**Syntax**
+
+```typescript
+getChildAsComponent<T>(selector:string) : WFComponent<T>;
+```
+
+#### Parameters {#get-child-component-parameter}
+
+| Name       | Type     | Description       |
+| ---------- | -------- | ----------------- |
+| `selector` | `string` | The CSS selector. |
+
+---
+
+### `getChildAsComponents(selector)` {#get-child-components}
+
+Returns an array of matched children elements under the current parent element as WFComponent instances.
+
+```typescript title="Example"
+// Create a new WFComponent instance for a product listing element
+const productList = new WFComponent(`.product-listing`);
+// Create an array of WFComponent instances for all product cards inside the listing
+const productCards =
+  productList.getChildAsComponents(`.product-card`);
+productCards.forEach((productCard) => {
+  console.log(productCard);
+});
+```
+
+**Syntax**
+
+```typescript
+getChildAsComponents<T>(selector:string) : WFComponent<T>[];
+```
+
+#### Parameters {#get-child-components-parameter}
+
+| Name       | Type     | Description       |
+| ---------- | -------- | ----------------- |
+| `selector` | `string` | The CSS selector. |
+
+---
+
+### `getManyChildAsComponents(selector)` {#get-many-child-components}
+
+Returns matched children elements under the current parent element based on the provided object of selectors as WFComponent instances.
+
+```typescript title="Example"
+// Create a new WFComponent instance for a product card
+const productCard = new WFComponent(`.product-card`);
+
+// Define an object with selectors for various child elements
+const selectors = {
+  img: ".product-img",
+  title: ".product-title",
+  price: ".product-price",
+};
+
+// Get the specified child elements within the product card
+const { img, title, price } =
+  productCard.getManyChildAsComponents(selectors);
+
+console.log(img, title, price);
+```
+
+**Syntax**
+
+```typescript
+getManyChildAsComponents(selector:{[key:string]:string}) : {[key:string]:WFComponent};
+```
+
+#### Parameters {#get-many-child-components-parameter}
+
+| Name       | Type     | Description                                                                                                 |
+| ---------- | -------- | ----------------------------------------------------------------------------------------------------------- |
+| `selector` | `Object` | An object containing key-value pairs for naming variables in the return and their associated CSS selectors. |
+
+---
+
+### `getCssClass()` {#get-css-class}
+
+Returns an array containing all the CSS classes present in the element.
+
+```typescript title="Example"
+// Create a new WFComponent instance for a button
+const button = new WFComponent(`.btn`);
+const cssClasses = button.getCssClass();
+console.log(cssClasses); // Outputs: ["btn", "btn-primary", "small"]
+```
+
+**Syntax**
+
+```typescript
+getCssClass() : string[];
+```
+
+---
+
+### `addCssClass(className)` {#add-css-class}
+
+Adds the specified CSS class to the element.
+
+```typescript title="Example"
+// Create a new WFComponent instance for a button
+const button = new WFComponent(`.btn`);
+// Append the CSS class
+button.addCssClass("btn-primary");
+const cssClasses = button.getCssClass();
+console.log(cssClasses); // Outputs: ["btn", "btn-primary"]
+```
+
+**Syntax**
+
+```typescript
+addCssClass(className:string):void;
+```
+
+#### Parameters {#add-css-class-parameter}
+
+| Name        | Type     | Description        |
+| ----------- | -------- | ------------------ |
+| `className` | `string` | The CSS class name |
+
+---
+
+### `replaceCssClass(oldClassName,newClassName)` {#replace-css-class}
+
+Replaces the old CSS class with the new CSS class on the element.
+
+```typescript title="Example"
+// Create a new WFComponent instance for a button
+const button = new WFComponent(`.btn`);
+console.log(button.getCssClass()); // Outputs: ["btn", "btn-primary", "small"]
+
+// Replace the CSS class
+button.replaceCssClass("btn-primary", "btn-secondary");
+console.log(button.getCssClass()); // Outputs: ["btn", "btn-secondary", "small"]
+```
+
+**Syntax**
+
+```typescript
+replaceCssClass(oldClassName:string,newClassName:string):void;
+```
+
+#### Parameters {#replace-css-class-parameter}
+
+| Name           | Type     | Description                       |
+| -------------- | -------- | --------------------------------- |
+| `oldClassName` | `string` | The old CSS class name to replace |
+| `newClassName` | `string` | The new CSS class name to set     |
+
+---
+
+### `toggleCssClass(className)` {#toggle-css-class}
+
+Toggles the presence of the specified CSS class on the element.
+
+```typescript title="Example"
+// Create a new WFComponent instance for an accordion element
+const accordion = new WFComponent(`.accordion`);
+console.log(accordion.getCssClass()); // Outputs: ["accordion", "opened"]
+
+// Toggle the CSS class
+accordion.toggleCssClass("opened");
+console.log(accordion.getCssClass()); // Outputs: ["accordion"]
+
+accordion.toggleCssClass("opened");
+console.log(accordion.getCssClass()); // Outputs: ["accordion", "opened"]
+```
+
+**Syntax**
+
+```typescript
+toggleCssClass(className:string):void;
+```
+
+#### Parameters {#toggle-css-class-parameter}
+
+| Name        | Type     | Description                  |
+| ----------- | -------- | ---------------------------- |
+| `className` | `string` | The CSS class name to toggle |
+
+---
+
+### `removeCssClass(className)` {#remove-css-class}
+
+Removes the specified CSS class from the element.
+
+```typescript title="Example"
+// Create a new WFComponent instance for a dialog element
+const dialog = new WFComponent(`.dialog`);
+console.log(dialog.getCssClass()); // Outputs: ["dialog", "opened"]
+
+// Remove the CSS class
+dialog.removeCssClass("opened");
+console.log(dialog.getCssClass()); // Outputs: ["dialog"]
+```
+
+**Syntax**
+
+```typescript
+removeCssClass(className:string):void;
+```
+
+#### Parameters {#remove-css-class-parameter}
+
+| Name        | Type     | Description                  |
+| ----------- | -------- | ---------------------------- |
+| `className` | `string` | The CSS class name to remove |
+
+---
+
+### `setStyle(style)` {#set-style}
+
+Updates the element's style by applying the provided style object.
+
+```typescript title="Example"
+// Create a new WFComponent instance for a accordion element
+const accordion = new WFComponent(`.accordion`);
+accordion.setStyle({
+  height: "300px",
+  //You can use variables as well
+  "--my-variable": "10px",
+});
+```
+
+**Syntax**
+
+```typescript
+setStyle(style:styleProperties):void;
+```
+
+#### Parameters {#remove-css-class-parameter}
+
+| Name    | Type     | Description                                             |
+| ------- | -------- | ------------------------------------------------------- |
+| `style` | `Object` | An object containing CSS styles or valid CSS variables. |
+
+---
+
+### `getStyle()` {#get-style}
+
+Returns the style object associated with the element.
+
+```typescript title="Example"
+// Create a new WFComponent instance for an accordion element
+const accordion = new WFComponent(`.accordion`);
+accordion.setStyle({
+  height: "300px",
+  "--my-variable": "10px",
+});
+
+// Retrieve the style object for the accordion element
+const accordionStyle = accordion.getStyle();
+
+// Output the style object to the console
+console.log(accordionStyle); // Outputs: {..., height: "300px", "--my-variable": "10px", ...}
+```
+
+**Syntax**
+
+```typescript
+getStyle():styleProperties;
+```
+
+---
+
+### `on(eventType, fn)` {#on-listener}
+
+Attaches an event listener to the element, listening for events such as 'click,' 'change,' or 'blur.'
+
+```typescript title="Example"
+// Create a new WFComponent instance for a button element
+const button = new WFComponent(`.button`);
+
+// Define a click event handler function
+const onClick = () => {
+  console.log("Button clicked");
+};
+
+// Attach the click event listener to the button
+button.on("click", onClick);
+
+// Create a new WFComponent instance for an input element
+const input = new WFComponent(`.my-input`);
+
+// Define a change event handler function
+const onChange = () => {
+  console.log("Input text changed", input.getAttribute("value"));
+};
+
+// Attach the change event listener to the input
+input.on("change", onChange);
+```
+
+**Syntax**
+
+```typescript
+on(eventType:string,(event:Event)=>void):void;
+```
+
+#### Parameters {#remove-css-class-parameter}
+
+| Name        | Type              | Description                                                                                                               |
+| ----------- | ----------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| `eventType` | `string`          | A case-sensitive string representing the [event type](https://developer.mozilla.org/en-US/docs/Web/Events) to listen for. |
+| `fn`        | `function(event)` | A callback function that is executed when the specified event type is triggered.                                          |
+
+---
+
+### `off(eventType, fn)` {#off-listener}
+
+Detaches an event listener from the current element.
+
+```typescript title="Example"
+// Create a new WFComponent instance for a button element
+const button = new WFComponent(`.button`);
+
+// Define a click event handler function
+const onClick = () => {
+  console.log("Button clicked");
+};
+
+// Attach the click event listener to the button
+button.on("click", onClick);
+
+// Later, detach the click event listener
+button.off("click", onClick);
+```
+
+**Syntax**
+
+```typescript
+off(eventType:string,(event:Event)=>void):void;
+```
+
+#### Parameters {#remove-css-class-parameter}
+
+| Name        | Type              | Description                                                                                                           |
+| ----------- | ----------------- | --------------------------------------------------------------------------------------------------------------------- |
+| `eventType` | `string`          | A case-sensitive string representing the [event type](https://developer.mozilla.org/en-US/docs/Web/Events) to detach. |
+| `fn`        | `function(event)` | The callback function that was previously attached and should be detached from the specified event type.              |
+
+---
+
+### `getText()` {#get-text}
+
+Returns the text content of the element.
+
+```typescript title="Example"
+// Create a new WFComponent instance for a heading element
+const heading = new WFComponent(`.my-heading`);
+
+// Get the text content of the heading
+const textContent = heading.getText();
+console.log(textContent); // Outputs: "Welcome to xAtom!"
+```
+
+**Syntax**
+
+```typescript
+getText():string;
+```
+
+---
+
+### `setText(text)` {#set-text}
+
+Updates the inner text of the element with the provided text.
+
+```typescript title="Example"
+// Create a new WFComponent instance for a paragraph element
+const paragraph = new WFComponent(`.my-paragraph`);
+
+// Update the inner text of the paragraph
+paragraph.setText("Hello, xAtom!");
+
+// Get the updated text
+const updatedText = paragraph.getText();
+console.log(updatedText); // Outputs: "Hello, xAtom!"
+```
+
+**Syntax**
+
+```typescript
+setText(text:string):void;
+```
+
+#### Parameters {#set-text-parameters}
+
+| Name   | Type     | Description                        |
+| ------ | -------- | ---------------------------------- |
+| `text` | `string` | The text to set as the inner text. |
+
+---
+
+### `getTextContent()` {#get-text-content}
+
+Returns the text content of the element.
+
+```typescript title="Example"
+// Create a new WFComponent instance for a span element
+const span = new WFComponent(`.my-span`);
+
+// Get the text content of the span
+const spanTextContent = span.getTextContent();
+console.log(spanTextContent); // Outputs: "Click me!"
+```
+
+**Syntax**
+
+```typescript
+getTextContent():string;
+```
+
+---
+
+### `setTextContent(text)` {#set-text-content}
+
+Updates the text content of the element with the provided text.
+
+```typescript title="Example"
+// Create a new WFComponent instance for a div element
+const div = new WFComponent(`.my-div`);
+
+// Update the text content of the div
+div.setTextContent("This is some dynamic content.");
+
+// Get the updated text content
+const updatedTextContent = div.getTextContent();
+console.log(updatedTextContent); // Outputs: "This is some dynamic content."
+```
+
+**Syntax**
+
+```typescript
+setTextContent(text:string):void;
+```
+
+#### Parameters {#set-text-content-parameters}
+
+| Name   | Type     | Description                               |
+| ------ | -------- | ----------------------------------------- |
+| `text` | `string` | The text to set as the element's content. |
+
+---
+
+### `updateTextViaAttrVar(keyPair)` {#update-text-var}
+
+Enhance your web app's dynamism by updating text content based on configured xa-var attributes. This method checks for xa-var attributes on the element or its child elements and updates text accordingly using key-value pairs.
+
+```typescript title="Example"
+/**
+ * Example Product Card HTML structure:
+ * <div class="product-card">
+ *   <div class="img-container"><img src="..." /></div>
+ *   <h4 xa-var="title">Example title<h4>
+ *   <p xa-var="description">Example description<p>
+ *   <p xa-var="price">$0<p>
+ *   <button ...>Add to cart</button>
+ * </div>
+ */
+
+// Create a new WFComponent instance for a div element
+const productCard = new WFComponent(`.product-card`);
+
+// Update text content with key-value pairs
+productCard.updateTextViaAttrVar({
+  title: "Iced Americano",
+  description: "Bold and bitter coffee drink!",
+  price: "$5.00",
+});
+
+/**
+ * After text update, the Product Card will look like this:
+ * <div class="product-card">
+ *   <div class="img-container"><img src="..." /></div>
+ *   <h4 xa-var="title">Iced Americano<h4>
+ *   <p xa-var="description">Bold and bitter coffee drink!<p>
+ *   <p xa-var="price">$5.00<p>
+ *   <button ...>Add to cart</button>
+ * </div>
+ */
+```
+
+#### TODO: Webflow Screenshot
+
+**Syntax**
+
+```typescript
+updateTextViaAttrVar(keyPair:{[key:string]:string}):void;
+```
+
+#### Parameters {#update-text-var-parameters}
+
+| Name      | Type     | Description                                                        |
+| --------- | -------- | ------------------------------------------------------------------ |
+| `keyPair` | `Object` | An object containing variable names as keys and strings as values. |
+
+---
+
+### `getHTML()` {#get-html}
+
+Returns the HTML content of the element.
+
+```typescript title="Example"
+// Create a new WFComponent instance for a section element
+const section = new WFComponent(`.my-section`);
+
+// Get the HTML content of the section
+const sectionHTML = section.getHTML();
+console.log(sectionHTML); // Outputs: "<div class="content">...</div>"
+```
+
+**Syntax**
+
+```typescript
+getHTML():string;
+```
+
+---
+
+### `setHTML(htmlString)` {#set-html}
+
+Updates the inner HTML content of the element with the provided HTML string.
+
+```typescript title="Example"
+// Create a new WFComponent instance for a div element
+const div = new WFComponent(`.my-div`);
+
+// Update the inner HTML content of the div
+div.setHTML("<p>This is <strong>bold</strong> text.</p>");
+
+// Get the updated HTML content
+const updatedHTML = div.getHTML();
+console.log(updatedHTML); // Outputs: "<p>This is <strong>bold</strong> text.</p>"
+```
+
+**Syntax**
+
+```typescript
+setHTML(htmlString:string):void;
+```
+
+#### Parameters {#set-html-parameters}
+
+| Name         | Type     | Description                           |
+| ------------ | -------- | ------------------------------------- |
+| `htmlString` | `string` | The HTML string to set as inner HTML. |
+
+---
+
+### `getCloneAsComponent()` {#get-clone-as-component}
+
+Returns a clone of the current WFComponent as a new component instance.
+
+```typescript title="Example"
+// Create a new WFComponent instance for an element
+const originalComponent = new WFComponent(`.my-element`);
+
+// Clone the component
+const clonedComponent = originalComponent.getCloneAsComponent();
+```
+
+**Syntax**
+
+```typescript
+getCloneAsComponent():WFComponent<T>;
+```
+
+---
+
+### `appendChild(child)` {#append-child}
+
+Appends the specified `WFComponent` child element to the current element.
+
+```typescript title="Example"
+// Create a new WFComponent instance for a parent element
+const parent = new WFComponent(`.parent`);
+
+// Create a new child WFComponent element and clone child
+const child = new WFComponent(`.child`).getCloneAsComponent();
+
+// Append the child WFComponent element to the parent
+parent.appendChild(child);
+```
+
+**Syntax**
+
+```typescript
+appendChild(child:WFComponent):void;
+```
+
+#### Parameters {#append-child-parameters}
+
+| Name    | Type          | Description                                |
+| ------- | ------------- | ------------------------------------------ |
+| `child` | `WFComponent` | The `WFComponent` child element to append. |
+
+---
+
+### `removeAllChildren()` {#remove-all-children}
+
+Removes all children elements from the current element.
+
+```typescript title="Example"
+// Create a new WFComponent instance for a parent element
+const parent = new WFComponent(`.parent`);
+
+// Remove all children elements from the parent
+parent.removeAllChildren();
+```
+
+**Syntax**
+
+```typescript
+removeAllChildren():void;
+```
+
+---
+
+### `remove()` {#remove-element}
+
+Removes the element from the DOM.
+
+```typescript title="Example"
+// Create a new WFComponent instance for an element
+const element = new WFComponent(`.my-element`);
+
+// Remove the element from the DOM
+element.remove();
+```
+
+**Syntax**
+
+```typescript
+remove():void;
+```

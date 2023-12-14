@@ -1,0 +1,132 @@
+```mdx-code-block
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+```
+
+To kickstart your journey with xAtom, let's get you set up with the necessary dependencies and fine-tune your TypeScript configuration. It's all about getting your project ready for action, developer-style 🧑‍💻!
+
+> #### Prerequisites
+>
+> - Before we dive in, let's ensure your development environment is all set with the essentials: Node.js (minimum v14.17.0) and your favorite package manager (npm, yarn, or pnpm). [Install Node.js](https://nodejs.org)
+> - Prior TypeScript knowledge is recommended [Learn More](https://www.typescriptlang.org/docs/)
+> - Familiarity with Browser Web APIs and interfaces is necessary. [Learn More](https://developer.mozilla.org/en-US/docs/Web/API)
+
+<br />
+
+## Create a project
+
+To kickstart a shiny new xAtom project, fire up your terminal and unleash the magic with this command
+
+<Tabs>
+<TabItem value="npm" label="npm" default>
+
+```bash title="Terminal"
+npx create-xatom-app my-site
+```
+
+</TabItem>
+<TabItem value="yarn" label="yarn">
+
+```bash title="Terminal"
+yarn create xatom-app my-site
+```
+
+</TabItem>
+<TabItem value="pnpm" label="pnpm">
+
+```bash title="Terminal"
+pnpm create xatom-app my-site
+```
+
+</TabItem>
+</Tabs>
+
+## Project structure
+
+Assuming you named your site `my-site`. you can expect to find the following files neatly generated within a freshly minted `my-site/` directory
+
+```bash title="Directory tree"
+my-site
+├── node_modules
+├── dist
+├── src
+│   ├── modules
+│   │   └── index.ts
+│   ├── routes
+│   │   └── index.ts
+│   ├── app.ts
+├── package.json
+├── README.md
+├── tsconfig.json
+└── xatom.json
+```
+
+### Project structure rundown
+
+- `/dist/` The treasure trove of production-ready, minified, and transpiled JavaScript code, primed for deployment.
+- `/src/` Source directory, the nerve center of your project, housing TypeScript source files where ideas turn into code.
+- `/src/modules/` Modules directory, the hub for your web app's modules, you can neatly organizing TypeScript files handling business logic such as authentication, forms, and REST APIs
+- `/src/routes/` App Route directory, Your web app's navigation center, where you fine-tune routes. Set up protected, public paths, and designate modules for seamless page loading
+- `/src/app.js` This file serves as the entry point, where the intricate mechanics of your application are orchestrated and executed.
+- `/package.json` Your gateway to npm packages. Feel free to install and utilize any npm packages of your choice, expanding your project's capabilities with ease.
+- `/README.md` Your project's handbook. detailing project information, setup instructions, and essential insights for seamless development and collaboration. make sure to maintain it well
+- `/tsconfig.json` TypeScript configuration file, xAtom has you covered with all the essential configurations. Feel free to customize as needed, but we've got the basics covered for you.
+- `/xatom.json` xAtom configuration file, Your xAtom command center. This configuration file is your ally, allowing you to specify your Webflow project, set the local serving port for xAtom, and fine-tune other crucial settings for your web development adventure.
+
+## Running the development server
+
+To experience real-time previews of your changes while editing files, 🚀 launch a local development server. This server dynamically serves your Webflow site on localhost, allowing you to test your custom business logic without the need for Webflow publishing. Just make sure you're under your project directory! 📂 and `xatom.json` is configured [Learn More](#).
+
+<Tabs>
+<TabItem value="npm" label="npm" default>
+
+```bash title="Terminal"
+npm run start
+```
+
+</TabItem>
+<TabItem value="yarn" label="yarn">
+
+```bash title="Terminal"
+yarn start
+```
+
+</TabItem>
+<TabItem value="pnpm" label="pnpm">
+
+```bash title="Terminal"
+pnpm start
+```
+
+</TabItem>
+</Tabs>
+
+## Build the app for production
+
+To generate production-ready code, 🔨 simply utilize the 'build' command. In production mode, your application undergoes automatic bundling and optimization, ensuring it's primed for deployment and peak performance. Don't forget to be in your project directory! 📂
+
+<Tabs>
+<TabItem value="npm" label="npm" default>
+
+```bash title="Terminal"
+npm run build
+```
+
+</TabItem>
+<TabItem value="yarn" label="yarn">
+
+```bash title="Terminal"
+yarn build
+```
+
+</TabItem>
+<TabItem value="pnpm" label="pnpm">
+
+```bash title="Terminal"
+pnpm build
+```
+
+</TabItem>
+</Tabs>
+
+Your web app's production-grade custom code is ready for deployment [Learn More](#).

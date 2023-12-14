@@ -1,0 +1,657 @@
+The `WFFormComponent` is a powerful component within the xAtom framework that empowers you to intercept Webflow forms and extend their functionalities. With this component, you can perform custom validations, build complex flows, and seamlessly submit form data to your preferred API services, such as REST APIs, GraphQL, or any other web-based APIs. The `WFFormComponent` gives you complete control over form success and error states, making it an invaluable tool for enhancing and customizing your web forms.
+
+Here's a closer look at the key features and capabilities of the `WFFormComponent`:
+
+- **Form Interception**: Intercept Webflow forms to add custom logic and validation before submission.
+
+- **Extensible Functionality**: Extend the functionality of your web forms by integrating complex operations and custom business logic.
+
+- **API Integration**: Easily submit form data to your preferred API services, including REST APIs, GraphQL, and more.
+
+- **Total Control**: Gain complete control over the form's success and error states, allowing you to tailor the user experience to your specific needs.
+
+With the `WFFormComponent`, you can take your web forms to the next level, providing enhanced user experiences and seamless integration with your backend services. Whether you need to validate user input, perform advanced operations on form data, or communicate with external APIs, this component empowers you to do so efficiently and effectively.
+
+## Getting Started
+
+**Initialization**: To begin using the `WFFormComponent` class, you should initialize it with a query selector. Here's a step-by-step guide on how to get started:
+
+```typescript title="Example"
+import { WFFormComponent } from "@xatom/core";
+
+// Initialize a new instance of WFFormComponent
+const myForm = new WFFormComponent<{
+  fullname: string; // Input with name="fullname"
+  email: string; // Input with name="email"
+}>(".my-form");
+
+// Set form data
+myForm.setFromData({
+  fullname: "John Doe",
+  email: "john@doe.com",
+});
+
+// Get form data
+const formData = myForm.getFormData();
+console.log(formData); // { fullname: "John Doe", email: "john@doe.com" }
+
+// Intercept webflow form submission and prevent it
+myForm.onFormSubmit((data) => {
+  console.log(data); // { fullname: "John Doe", email: "john@doe.com" }
+});
+```
+
+In this example:
+
+- We create a new instance of `WFFormComponent` by providing a query selector (`.my-form`) that matches the form element you want to work with.
+- We set form data using the `setFromData` method, allowing you to populate form fields with initial data.
+- You can retrieve form data using the `getFormData` method, which returns an object containing the current values of form fields.
+- Finally, we intercept the webflow form submission using the `onFormSubmit` method, which allows you to execute custom logic and prevent the default form submission if needed.
+
+With these steps, you can effectively utilize the `WFFormComponent` to extend the functionality of webflow forms, including custom validation, complex functions, and data submission to your preferred APIs.
+
+**Syntax**
+
+```typescript
+new WFFormComponent(selector);
+```
+
+> #### Note
+>
+> **Compatibility with `WFComponent`**
+>
+> The `WFFormComponent` seamlessly extends the capabilities of the `WFComponent` class. This means that all the properties and methods available in `WFComponent` are fully compatible and can be used with `WFFormComponent`. This compatibility provides you with a wide range of options for enhancing and customizing the behavior of your dynamic lists. Feel free to leverage the power of both components to achieve your desired results efficiently.
+
+## Selector Parameter
+
+The `selector` parameter within `WFFormComponent` is versatile and can accept one of the following types:
+
+- A string that precisely matches a valid CSS selector.
+- An HTMLElement representing a specific element in the document.
+- An existing `WFComponent` instance.
+
+## Methods
+
+### `getFormData()`
+
+This method allows you to retrieve all form data as an object.
+
+```typescript title="Example"
+// Initialize a new instance of WFFormComponent
+const myForm = new WFFormComponent<{
+  fullname: string; // input name="fullname"
+  email: string; // input name="email"
+}>(".my-form");
+
+// Get form data
+const formData = myForm.getFormData();
+console.log(formData); // { fullname: "John Doe", email: "john@doe.com" }
+```
+
+#### Syntax
+
+```typescript
+getFormData(): { [key: string]: string | File | File[] }
+```
+
+---
+
+### `setFromData(fromData)`
+
+This method allows you to set form data, automatically populating input values.
+
+```typescript title="Example"
+// Initialize a new instance of WFFormComponent
+const myForm = new WFFormComponent<{
+  fullname: string; // input name="fullname"
+  email: string; // input name="email"
+}>(".my-form");
+
+// Set form data
+myForm.setFromData({
+  fullname: "John Doe",
+  email: "john@doe.com",
+});
+
+// Get form data
+const formData = myForm.getFormData();
+console.log(formData); // { fullname: "John Doe", email: "john@doe.com" }
+```
+
+#### Syntax
+
+```typescript
+setFromData(formData: { [key: string]: string | File | File[] }): void
+```
+
+#### Parameters {#set-form-data-parameter}
+
+| Name       | Type                                                         | Description                         |
+| ---------- | ------------------------------------------------------------ | ----------------------------------- |
+| `fromData` | <code>{[key:string]:string &#124; File &#124; File[]}</code> | form data object to set from values |
+
+---
+
+### `onFormSubmit(fn)`
+
+This method allows you to intercept webflow form submissions and prevent the form submission.
+
+```typescript title="Example"
+// Initialize a new instance of WFFormComponent
+const myForm = new WFFormComponent<{
+  fullname: string; // input name="fullname"
+  email: string; // input name="email"
+}>(".my-form");
+
+// Intercept webflow form submission and prevent it
+myForm.onFormSubmit((data) => {
+  console.log(data); // { fullname: "John Doe", email: "john@doe.com" }
+});
+```
+
+#### Syntax
+
+```typescript
+onFormSubmit(
+  fn: (
+    data: { [key: string]: string | File | File[] },
+    event: SubmitEvent
+  ) => void
+): void
+```
+
+#### Parameters {#on-form-submit-parameter}
+
+| Name | Type       | Description         |
+| ---- | ---------- | ------------------- |
+| `fn` | `function` | A callback function |
+
+#### Callback Function Parameters {#on-form-submit-fn-parameter}
+
+| Name    | Type                                                         | Description  |
+| ------- | ------------------------------------------------------------ | ------------ |
+| `data`  | <code>{[key:string]:string &#124; File &#124; File[]}</code> | Form data    |
+| `event` | `SubmitEvent`                                                | Submit event |
+
+---
+
+### `submitWebflowForm()`
+
+This method submits the webflow form programmatically.
+
+```typescript title="Example"
+// Initialize a new instance of WFFormComponent
+const myForm = new WFFormComponent<{
+  fullname: string; // input name="fullname"
+  email: string; // input name="email"
+}>(".my-form");
+
+// Intercept webflow form submission and prevent it
+myForm.onFormSubmit((data) => {
+  // Simulate API call to validate email
+  validateEmailOnServer(data.email)
+    .then((emailExists) => {
+      if (!emailExists) {
+        // If email does not exist on the server, submit the webflow form programmatically
+        myForm.submitWebflowForm();
+      } else {
+        // Handle case where email already exists (e.g., show error message)
+        console.log(
+          "Email already exists. Please use a different email."
+        );
+      }
+    })
+    .catch((error) => {
+      // Handle API call error
+      console.error("API call failed:", error);
+    });
+});
+```
+
+#### Syntax
+
+```typescript
+submitWebflowForm(): void
+```
+
+---
+
+### `getFormComponent()`
+
+This method returns the HTML form element as a `WFComponent<HTMLFormElement>`.
+
+```typescript title="Example"
+// Initialize a new instance of WFFormComponent
+const myForm = new WFFormComponent<{
+  fullname: string; // input name="fullname"
+  email: string; // input name="email"
+}>(".my-form");
+
+// Get the form component
+const formComponent = myForm.getFormComponent();
+```
+
+#### Syntax
+
+```typescript
+getFormComponent(): WFComponent<HTMLFormElement>
+```
+
+---
+
+### `getSuccessComponent()`
+
+This method returns the success element as a `WFComponent<HTMLDivElement>`.
+
+```typescript title="Example"
+// Initialize a new instance of WFFormComponent
+const myForm = new WFFormComponent<{
+  fullname: string; // input name="fullname"
+  email: string; // input name="email"
+}>(".my-form");
+
+// Get the sucess component
+const successComponent = myForm.getSuccessComponent();
+successComponent.updateTextViaAttrVar({
+  message: "Form was successfully submitted",
+});
+```
+
+#### Syntax
+
+```typescript
+getSuccessComponent(): WFComponent<HTMLDivElement>
+```
+
+---
+
+### `getErrorComponent()`
+
+This method returns the error element as a `WFComponent<HTMLDivElement>`.
+
+```typescript title="Example"
+// Initialize a new instance of WFFormComponent
+const myForm = new WFFormComponent<{
+  fullname: string; // input name="fullname"
+  email: string; // input name="email"
+}>(".my-form");
+
+// Get the error component
+const errorComponent = myForm.getErrorComponent();
+if (invalidEmail)
+  errorComponent.updateTextViaAttrVar({
+    message: "Please enter a valid email",
+  });
+
+if (serverError)
+  errorComponent.updateTextViaAttrVar({
+    message: serverErrorMessage,
+  });
+```
+
+#### Syntax
+
+```typescript
+getErrorComponent(): WFComponent<HTMLDivElement>
+```
+
+---
+
+### `showSuccessState()`
+
+This method hides the form and shows the success element.
+
+```typescript title="Example"
+// Initialize a new instance of WFFormComponent
+const myForm = new WFFormComponent<{
+  fullname: string; // input name="fullname"
+  email: string; // input name="email"
+}>(".my-form");
+
+// Intercept webflow form submission and prevent it
+myForm.onFormSubmit((data) => {
+  // Simulate API call to validate email
+  validateEmailOnServer(data.email)
+    .then((emailExists) => {
+      if (emailExists) {
+        // If email does exist on the server, show success state
+        // highlight-next-line
+        myForm.showSuccessState();
+      } else {
+        // Handle case where email already exists (e.g., show error message)
+        console.log("Email was not found.");
+      }
+    })
+    .catch((error) => {
+      // Handle API call error
+      console.error("API call failed:", error);
+    });
+});
+```
+
+#### Syntax
+
+```typescript
+showSuccessState(): void
+```
+
+---
+
+### `showErrorState()`
+
+This method shows the error element, displays the form element, and hides the success element.
+
+```typescript title="Example"
+// Initialize a new instance of WFFormComponent
+const myForm = new WFFormComponent<{
+  fullname: string; // input name="fullname"
+  email: string; // input name="email"
+}>(".my-form");
+
+// Intercept webflow form submission and prevent it
+myForm.onFormSubmit((data) => {
+  // Simulate API call to validate email
+  validateEmailOnServer(data.email)
+    .then((emailExists) => {
+      if (emailExists) {
+        // If email does exist on the server, show success state
+        myForm.showSuccessState();
+      } else {
+        // Handle case where email already exists (e.g., show error message)
+        console.log("Email was not found.");
+        // If email does not exist on the server, show error state
+        // highlight-next-line
+        myForm.showErrorState();
+      }
+    })
+    .catch((error) => {
+      // Handle API call error
+      console.error("API call failed:", error);
+    });
+});
+```
+
+#### Syntax
+
+```typescript
+showErrorState(): void
+```
+
+---
+
+### `showForm()`
+
+This method shows the form element, hides the error element, and hides the success element.
+
+```typescript title="Example"
+// Initialize a new instance of WFFormComponent
+const myForm = new WFFormComponent<{
+  fullname: string; // input name="fullname"
+  email: string; // input name="email"
+}>(".my-form");
+
+// Intercept webflow form submission and prevent it
+myForm.onFormSubmit((data) => {
+  // Simulate API call to validate email
+  validateEmailOnServer(data.email)
+    .then((emailExists) => {
+      if (emailExists) {
+        // If email does exist on the server, show success state
+        myForm.showSuccessState();
+      } else {
+        // Handle case where email already exists (e.g., show error message)
+        console.log("Email was not found.");
+        // If email does not exist on the server, show error state
+        myForm.showErrorState();
+      }
+    })
+    .catch((error) => {
+      // Handle API call error
+      console.error("API call failed:", error);
+    })
+    .finally(() => {
+      setTimeout(() => {
+        // Show form, hides the error state and success state
+        // highlight-next-line
+        myForm.showForm();
+      }, 3000); // After 3 seconds
+    });
+});
+```
+
+#### Syntax
+
+```typescript
+showForm(): void
+```
+
+---
+
+### `disableForm()`
+
+This method disables the form by disabling all inputs, preventing users from changing input values.
+
+```typescript title="Example"
+// Initialize a new instance of WFFormComponent
+const myForm = new WFFormComponent<{
+  fullname: string; // input name="fullname"
+  email: string; // input name="email"
+}>(".my-form");
+
+// Intercept webflow form submission and prevent it
+myForm.onFormSubmit((data) => {
+  // highlight-next-line
+  myForm.disableForm();
+  // Simulate API call to validate email
+  validateEmailOnServer(data.email)
+    .then((emailExists) => {
+      if (emailExists) {
+        // If email does exist on the server, show success state
+        myForm.showSuccessState();
+      } else {
+        // Handle case where email already exists (e.g., show error message)
+        console.log("Email was not found.");
+        // If email does not exist on the server, show error state
+        myForm.showErrorState();
+      }
+    })
+    .catch((error) => {
+      // Handle API call error
+      console.error("API call failed:", error);
+    });
+});
+```
+
+#### Syntax
+
+```typescript
+disableForm(): void
+```
+
+---
+
+### `enableForm()`
+
+This method enables the form by enabling all inputs, allowing users to interact with input elements.
+
+```typescript title="Example"
+// Initialize a new instance of WFFormComponent
+const myForm = new WFFormComponent<{
+  fullname: string; // input name="fullname"
+  email: string; // input name="email"
+}>(".my-form");
+
+// Intercept webflow form submission and prevent it
+myForm.onFormSubmit((data) => {
+  myForm.disableForm();
+  // Simulate API call to validate email
+  validateEmailOnServer(data.email)
+    .then((emailExists) => {
+      if (emailExists) {
+        // If email does exist on the server, show success state
+        myForm.showSuccessState();
+      } else {
+        // Handle case where email already exists (e.g., show error message)
+        console.log("Email was not found.");
+        // If email does not exist on the server, show error state
+        myForm.showErrorState();
+      }
+    })
+    .catch((error) => {
+      // Handle API call error
+      console.error("API call failed:", error);
+    })
+    .finally(() => {
+      // highlight-next-line
+      myForm.enableForm();
+    });
+});
+```
+
+#### Syntax
+
+```typescript
+enableForm(): void
+```
+
+---
+
+### `resetForm()`
+
+This method resets the form, clearing all input values.
+
+```typescript title="Example"
+// Initialize a new instance of WFFormComponent
+const myForm = new WFFormComponent<{
+  fullname: string; // input name="fullname"
+  email: string; // input name="email"
+}>(".my-form");
+
+// Intercept webflow form submission and prevent it
+myForm.onFormSubmit((data) => {
+  myForm.disableForm();
+  // Simulate API call to validate email
+  validateEmailOnServer(data.email)
+    .then((emailExists) => {
+      if (emailExists) {
+        // If email does exist on the server, show success state
+        myForm.showSuccessState();
+      } else {
+        // Handle case where email already exists (e.g., show error message)
+        console.log("Email was not found.");
+        // If email does not exist on the server, show error state
+        myForm.showErrorState();
+      }
+    })
+    .catch((error) => {
+      // Handle API call error
+      console.error("API call failed:", error);
+    })
+    .finally(() => {
+      // highlight-next-line
+      myForm.resetForm();
+    });
+});
+```
+
+#### Syntax
+
+```typescript
+resetForm(): WFComponent
+```
+
+---
+
+### `getSubmitButton()`
+
+This method returns the form's submit button if present.
+
+```typescript title="Example"
+// Initialize a new instance of WFFormComponent
+const myForm = new WFFormComponent<{
+  fullname: string; // input name="fullname"
+  email: string; // input name="email"
+}>(".my-form");
+
+// Intercept webflow form submission and prevent it
+myForm.onFormSubmit((data) => {
+  // highlight-next-line
+  myForm.getSubmitButton().setAttribute("disabled", "disabled");
+  // Simulate API call to validate email
+  validateEmailOnServer(data.email)
+    .then((emailExists) => {
+      if (emailExists) {
+        // If email does exist on the server, show success state
+        myForm.showSuccessState();
+      } else {
+        // Handle case where email already exists (e.g., show error message)
+        console.log("Email was not found.");
+        // If email does not exist on the server, show error state
+        myForm.showErrorState();
+      }
+    })
+    .catch((error) => {
+      // Handle API call error
+      console.error("API call failed:", error);
+    });
+});
+```
+
+#### Syntax
+
+```typescript
+getSubmitButton(): WFComponent
+```
+
+---
+
+### `updateSubmitButtonText(text)`
+
+This method allows you to update the text of the form's submit button. This can be useful in cases where you need to change the text dynamically, such as displaying "Please Wait" during form submission.
+
+```typescript title="Example"
+// Initialize a new instance of WFFormComponent
+const myForm = new WFFormComponent<{
+  fullname: string; // input name="fullname"
+  email: string; // input name="email"
+}>(".my-form");
+
+// Intercept webflow form submission and prevent it
+myForm.onFormSubmit((data) => {
+  // highlight-next-line
+  myForm.updateSubmitButtonText("Please Wait...");
+  // Simulate API call to validate email
+  validateEmailOnServer(data.email)
+    .then((emailExists) => {
+      if (emailExists) {
+        // If email does exist on the server, show success state
+        myForm.showSuccessState();
+      } else {
+        // Handle case where email already exists (e.g., show error message)
+        console.log("Email was not found.");
+        // If email does not exist on the server, show error state
+        myForm.showErrorState();
+      }
+    })
+    .catch((error) => {
+      // Handle API call error
+      console.error("API call failed:", error);
+    })
+    .finally(() => {
+      // highlight-next-line
+      myForm.updateSubmitButtonText("Submit");
+    });
+});
+```
+
+#### Syntax
+
+```typescript
+updateSubmitButtonText(text:string): void
+```
+
+#### Parameters {#update-submit-button-text-parameter}
+
+| Name   | Type     | Description                       |
+| ------ | -------- | --------------------------------- |
+| `text` | `string` | Text to set on the submit button. |

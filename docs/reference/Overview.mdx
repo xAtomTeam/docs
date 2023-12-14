@@ -1,0 +1,89 @@
+# Overview
+
+Welcome to the xAtom framework's API reference, thoughtfully designed to empower developers with a comprehensive set of APIs for building robust web applications. In the **Components** category, you'll find versatile APIs like **WFComponent**, enabling the conversion of HTML elements into interactive components with extensive control over styling and content updates. **WFDynamicList** streamlines the creation of dynamic listings with functional capabilities, while **WFFormComponent** simplifies complex form flows. **WFInvisibleForm** allows form submissions without any visible form elements.
+
+```mdx-code-block
+import DocCardList from '@theme/DocCardList';
+```
+
+```mdx-code-block
+
+<DocCardList items={[{
+          type: "category",
+          label: "Components",
+          description:"💡 Create interactive elements effortlessly.",
+          items: [{
+          type:"link",
+          href:"/docs/reference/components/WFComponent",
+          label:"",
+        }],
+        }
+        ]} ></DocCardList>
+
+```
+
+In the realm of **Routing**, **WFRoute** provides granular control over routing, allowing you to designate routes as protected or public to enhance the security of your web apps. **Authentication** is a breeze with **WFAuth**, offering a blueprint for implementing user authentication, and **WFAuthMiddleware**, seamlessly integrating authentication middleware into your application.
+
+```mdx-code-block
+
+<DocCardList items={[
+        {
+          type: "category",
+          label: "Routing",
+          description:"🚀 Total control over navigation",
+          items: [{
+          type:"link",
+          href:"/docs/reference/routing/WFRoute",
+          label:"",
+        }],
+        },{
+          type: "category",
+          label: "Authentication",
+          description:"🔒 Strengthening web app security",
+          items: [{
+          type:"link",
+          href:"/docs/reference/auth/WFAuth",
+          label:"",
+        }],
+        }
+        ]} ></DocCardList>
+
+```
+
+Under the **Utilities** section, **onReady** empowers you to execute code precisely when your Webflow site loads, while **navigate** facilitates programmatic navigation. For dynamic component creation, **createComponent** is your API of choice.
+
+```mdx-code-block
+
+<DocCardList items={[
+       {
+          type: "category",
+          label: "Utilities",
+          description:"🛠️ Simplifying development tasks",
+          items: [{
+          type:"link",
+          href:"/docs/reference/utils/onReady",
+          label:"",
+        }],
+        }
+        ]} ></DocCardList>
+
+```
+
+In the realm of **Data Services**, the **REST API Client** enables seamless integration with any REST API, while the **Apollo GraphQL Client** provides efficiency and flexibility for interacting with GraphQL APIs. Explore xAtom's developer-friendly APIs, designed to accelerate your web app development with precision and control.
+
+```mdx-code-block
+
+<DocCardList items={[
+      {
+          type: "category",
+          label: "Data Services",
+          description:"🌐 Streamlined data integration",
+          items: [{
+          type:"link",
+          href:"/docs/reference/services/RESTAPIClient",
+          label:"",
+        }],
+        }
+        ]} ></DocCardList>
+
+```

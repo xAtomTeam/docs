@@ -1,0 +1,427 @@
+The `WFInvisibleForm` class, part of the xAtom framework, is a versatile component that empowers you to create form requests to Webflow without the need for visible form elements in your webflow page. This functionality extends the boundaries of traditional form handling, providing you with the freedom to design intricate form interactions and execute custom logic. WFInvisibleForm enables you to submit multiple forms or aggregate data from various forms into a single submission, all while maintaining complete control over the form submission process.
+
+#### Key Advantages of WFInvisibleForm
+
+- **Flexible Form Handling**: Escape the confines of Webflow's form elements, granting you the flexibility to craft sophisticated form interactions tailored to your project's requirements.
+
+- **Combine Multiple Forms**: WFInvisibleForm empowers you to amalgamate data from multiple forms into a unified submission, streamlining the data collection process and enhancing efficiency.
+
+- **Full Control**: With WFInvisibleForm, you wield absolute authority over the form submission process. Implement custom logic, validation procedures, and error handling tailored to your application's unique needs.
+
+## Getting Started
+
+**Initialization**: To commence your journey with the WFInvisibleForm class, adhere to the following steps:
+
+```typescript title="Example"
+import { WFInvisibleForm } from "@xatom/core";
+
+// Initialize a new instance of WFInvisibleForm with form name
+const invisibleForm = new WFInvisibleForm("My Form Name");
+
+// Define your form data as an object
+const formData = {
+  fullname: "John Doe",
+  email: "john@doe.com",
+};
+
+// Set form data
+invisibleForm.setFormData(formData);
+
+// Listen for successful form submissions
+invisibleForm.onSuccess(() => {
+  console.log("Form submission is successful");
+});
+
+// Listen for failed form submissions
+invisibleForm.onError(() => {
+  console.log("Form submission has encountered an error");
+});
+
+// Submit the form
+invisibleForm.submitForm();
+```
+
+In this example:
+
+- We create a fresh instance of `WFInvisibleForm` and assign it a meaningful name ("My Form Name").
+
+- Form data is defined as an object, allowing you to structure the necessary data for the form request.
+
+- The `setFormData` method is employed to set the form data within the invisible form.
+
+- Event listeners for both successful and failed form submissions are established using the `onSuccess` and `onError` methods, respectively.
+
+- Finally, the `submitForm` method is invoked to initiate the form submission process.
+
+With these foundational steps, you embark on a journey of leveraging the capabilities of the WFInvisibleForm class to create seamless and customized form submissions in your web application.
+
+**Syntax**
+
+```typescript
+new WFInvisibleForm(formTitle:string);
+```
+
+## Methods
+
+### `setFormName(formTitle)`
+
+Use this method to set the form name, which will be visible on Webflow's form submission email and form section.
+
+```typescript title="Example"
+// Initialize a new instance of WFInvisibleForm
+const invisibleForm = new WFInvisibleForm<{
+  fullname: string;
+  email: string;
+}>();
+
+//highlight-start
+// Set the form name
+invisibleForm.setFormName("Newsletter Form");
+//highlight-end
+```
+
+#### Syntax
+
+```typescript
+setFormName(formTitle: string): void
+```
+
+#### Parameters {#set-form-name-parameter}
+
+| Name        | Type     | Description                     |
+| ----------- | -------- | ------------------------------- |
+| `formTitle` | `string` | The name to assign to the form. |
+
+---
+
+### `getFormName()`
+
+This method allows you to retrieve the form name, which is visible on Webflow's form submission email and form section.
+
+```typescript title="Example"
+// Initialize a new instance of WFInvisibleForm
+const invisibleForm = new WFInvisibleForm<{
+  fullname: string;
+  email: string;
+}>();
+
+// Set the form name
+invisibleForm.setFormName("Newsletter Form");
+
+//highlight-start
+// Get the form name
+const formName = invisibleForm.getFormName();
+//highlight-end
+console.log(formName); // Newsletter Form
+```
+
+#### Syntax
+
+```typescript
+getFormName(): string
+```
+
+---
+
+### `setFormData(data)`
+
+Use this method to set the form data that will be included in the form submission to Webflow. Please note that file uploads will be submitted only if your Webflow hosting plan allows it.
+
+```typescript title="Example"
+// Initialize a new instance of WFInvisibleForm
+const invisibleForm = new WFInvisibleForm<{
+  fullname: string;
+  email: string;
+}>("Newsletter Form");
+
+//highlight-start
+// Set the form data
+invisibleForm.setFormData({
+  fullname: "John Doe",
+  email: "john@doe.com",
+});
+//highlight-end
+```
+
+#### Syntax
+
+```typescript
+setFormData(formData: { [key: string]: string | File | File[] }): void
+```
+
+#### Parameters {#set-form-data-parameter}
+
+| Name       | Type                                                         | Description                                     |
+| ---------- | ------------------------------------------------------------ | ----------------------------------------------- |
+| `formData` | <code>{[key:string]:string &#124; File &#124; File[]}</code> | An object containing form data to be submitted. |
+
+---
+
+### `getFormData()`
+
+This method allows you to retrieve the form data that will be included in the form submission to Webflow. It provides access to the data visible on Webflow's form submission email and form section.
+
+```typescript title="Example"
+// Initialize a new instance of WFInvisibleForm
+const invisibleForm = new WFInvisibleForm<{
+  fullname: string;
+  email: string;
+}>("Newsletter Form");
+
+// Set the form data
+invisibleForm.setFormData({
+  fullname: "John Doe",
+  email: "john@doe.com",
+});
+
+//highlight-start
+// Get form data
+const formData = invisibleForm.getFormData();
+//highlight-end
+console.log(formData); // { fullname: "John Doe", email: "john@doe.com" }
+```
+
+#### Syntax
+
+```typescript
+getFormData(): { [key: string]: string | File | File[] }
+```
+
+---
+
+### `submitForm()`
+
+Use this method to submit the form request to Webflow.
+
+```typescript title="Example"
+// Initialize a new instance of WFInvisibleForm
+const invisibleForm = new WFInvisibleForm<{
+  fullname: string;
+  email: string;
+}>("Newsletter Form");
+
+// Initialize a submit button using its CSS selector
+const submitBtn = new WFComponent(".submit-btn");
+
+// Set the form data
+invisibleForm.setFormData({
+  fullname: "John Doe",
+  email: "john@doe.com",
+});
+
+// Listen for a click event on the submit button
+submitBtn.on("click", () => {
+  // Submit the form when the button is clicked
+  //highlight-start
+  invisibleForm.submitForm();
+  //highlight-end
+});
+```
+
+#### Syntax
+
+```typescript
+submitForm(): void
+```
+
+---
+
+### `isLoading()`
+
+This method allows you to check if the form request is still processing or not.
+
+```typescript title="Example"
+// Initialize a new instance of WFInvisibleForm
+const invisibleForm = new WFInvisibleForm<{
+  fullname: string;
+  email: string;
+}>("Newsletter Form");
+
+// Initialize a submit button using its CSS selector
+const submitBtn = new WFComponent(".submit-btn");
+
+// Set the form data
+invisibleForm.setFormData({
+  fullname: "John Doe",
+  email: "john@doe.com",
+});
+
+// Listen for a click event on the submit button
+submitBtn.on("click", () => {
+  //highlight-start
+  // Check if the form is currently loading (submitting)
+  const isLoading = invisibleForm.isLoading();
+  //highlight-end
+  if (isLoading) {
+    // Prevent form submission if the form is already submitting
+    return;
+  }
+
+  // Submit the form when the button is clicked
+  invisibleForm.submitForm();
+});
+```
+
+#### Syntax
+
+```typescript
+isLoading(): boolean
+```
+
+---
+
+### `onLoadingChange(fn)`
+
+Use this method to listen to changes in the form's loading status by providing a callback function.
+
+```typescript title="Example"
+// Initialize a new instance of WFInvisibleForm
+const invisibleForm = new WFInvisibleForm<{
+  fullname: string;
+  email: string;
+}>("Newsletter Form");
+
+// Initialize a submit button using its CSS selector
+const submitBtn = new WFComponent(".submit-btn");
+const loadingSpinner = new WFComponent(".loading-spinner");
+
+// Set the form data
+invisibleForm.setFormData({
+  fullname: "John Doe",
+  email: "john@doe.com",
+});
+
+//highlight-start
+// Listen for changes in the loading status
+invisibleForm.onLoadingChange((status) => {
+  if (status) {
+    // If the form is loading (submitting), show the loading spinner
+    loadingSpinner.addCssClass("show");
+  } else {
+    // If the form is not loading, hide the loading spinner
+    loadingSpinner.removeCssClass("show");
+  }
+});
+//highlight-end
+
+// Listen for a click event on the submit button
+submitBtn.on("click", () => {
+  // Check if the form is currently loading (submitting)
+  const isLoading = invisibleForm.isLoading();
+  if (isLoading) {
+    // Prevent form submission if the form is already submitting
+    return;
+  }
+
+  // Submit the form when the button is clicked
+  invisibleForm.submitForm();
+});
+```
+
+#### Syntax
+
+```typescript
+onLoadingChange(fn: (status: boolean) => void): void
+```
+
+#### Parameters {#on-loading-parameter}
+
+| Name | Type       | Description                                                                  |
+| ---- | ---------- | ---------------------------------------------------------------------------- |
+| `fn` | `function` | A callback function that receives the loading status as a boolean parameter. |
+
+---
+
+### `onSuccess(fn)`
+
+This method allows you to listen for successful form submissions by providing a callback function.
+
+```typescript title="Example"
+// Initialize a new instance of WFInvisibleForm
+const invisibleForm = new WFInvisibleForm<{
+  fullname: string;
+  email: string;
+}>("Newsletter Form");
+
+// Initialize a submit button using its CSS selector
+const submitBtn = new WFComponent(".submit-btn");
+const successComponent = new WFComponent(".success-message");
+
+// Set the form data
+invisibleForm.setFormData({
+  fullname: "John Doe",
+  email: "john@doe.com",
+});
+
+//highlight-start
+// Listen for a successful form submission
+invisibleForm.onSuccess(() => {
+  // When the form submission is successful, show the success message component
+  successComponent.addCssClass("show");
+});
+//highlight-end
+
+// Submit the form
+invisibleForm.submitForm();
+```
+
+#### Syntax
+
+```typescript
+onSuccess(fn: () => void): void
+```
+
+#### Parameters {#on-success-parameter}
+
+| Name | Type       | Description                                                                |
+| ---- | ---------- | -------------------------------------------------------------------------- |
+| `fn` | `function` | A callback function to be executed when the form submission is successful. |
+
+---
+
+### `onError(fn)`
+
+This method allows you to listen for failed form submissions by providing a callback function.
+
+```typescript title="Example"
+// Initialize a new instance of WFInvisibleForm
+const invisibleForm = new WFInvisibleForm<{
+  fullname: string;
+  email: string;
+}>("Newsletter Form");
+
+// Initialize a submit button using its CSS selector
+const submitBtn = new WFComponent(".submit-btn");
+const errorComponent = new WFComponent(".error-message");
+
+// Set the form data
+invisibleForm.setFormData({
+  fullname: "John Doe",
+  email: "john@doe.com",
+});
+
+//highlight-start
+// Listen for a failed form submission
+invisibleForm.onError(() => {
+  // When the form submission fails, show the error message component
+  errorComponent.addCssClass("show");
+});
+//highlight-end
+
+// Submit the form
+invisibleForm.submitForm();
+```
+
+#### Syntax
+
+```typescript
+onError(fn: () => void): void
+```
+
+#### Parameters {#on-error-parameter}
+
+| Name | Type       | Description                                                                      |
+| ---- | ---------- | -------------------------------------------------------------------------------- |
+| `fn` | `function` | A callback function to be executed when the form submission encounters an error. |
+
+These methods provide comprehensive control over the form submission process, enabling you to customize form data, monitor loading status, and respond to both successful and failed form submissions.

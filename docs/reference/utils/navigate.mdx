@@ -1,0 +1,35 @@
+The `navigate` function in the xAtom framework provides the ability to navigate to different pages within your web application.
+
+## Getting Started
+
+To begin using the `navigate` function, follow these steps:
+
+```typescript title="Example"
+import { navigate } from "@xatom/core";
+
+// Navigate to a specific path
+navigate("/dashboard");
+
+// Navigate to a path and replace the current page in the browsing history
+navigate({
+  to: "/sign-in",
+  type: "replace",
+});
+
+// Reload the current page
+navigate({
+  type: "reload",
+});
+```
+
+#### Syntax
+
+```typescript
+navigate(arg: string | { to: string; type: "replace" } | { type: "reload" }): void
+```
+
+#### Parameter
+
+| Name  | Type                                                                  | Description              |
+| ----- | --------------------------------------------------------------------- | ------------------------ |
+| `arg` | `string` or `{ to: string; type: "replace" }` or `{ type: "reload" }` | Navigation configuration |

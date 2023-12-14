@@ -1,0 +1,32 @@
+The `createComponent` function empowers you to generate a fresh `WFComponent` instance based on a specified HTML element tag. This capability unlocks a world of potential for dynamically creating user interfaces on the fly.
+
+## Getting Started
+
+To start creating `WFComponent` instances using the `createComponent` function, follow these steps:
+
+```typescript title="Example"
+import { createComponent } from "@xatom/core";
+
+// Create a WFComponent from a <button> element
+const button = createComponent<HTMLButtonElement>("button");
+
+// Create a WFComponent from an <input> element and configure it as a file input
+const fileInput = createComponent<HTMLInputElement>("input");
+fileInput.setAttribute("type", "file");
+fileInput.addCssClass("input-primary");
+
+// Assuming you have a "myForm" variable representing a form, you can append the file input to it
+myForm.getFormComponent().appendChild(fileInput);
+```
+
+#### Syntax
+
+```typescript
+createComponent<T>(type: keyof HTMLElementTagNameMap): WFComponent<T>
+```
+
+#### Parameter
+
+| Name   | Type                          | Description                                |
+| ------ | ----------------------------- | ------------------------------------------ |
+| `type` | `keyof HTMLElementTagNameMap` | The HTML tag to create the component from. |

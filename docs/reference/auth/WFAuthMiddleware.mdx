@@ -1,0 +1,213 @@
+The `WFAuthMiddleware` class is like a trusty shield for your web application, packed with security features to keep it safe and sound:
+
+- **Safeguard**: Protect specific sections of your business logic by effortlessly adding middleware. 🛡️
+- **Out-of-the-box Protection**: Ensure security for your `WFRoute` instances. 🚧
+- **Flexibility**: Customize and extend middleware to meet your unique requirements. 🧩
+- **Role-Based Access Control**: Manage access control using role information stored in the `WFAuth` instance. 👤
+
+Empower your web application's security with the versatile `WFAuthMiddleware` middleware. 🔐💪
+
+## Getting Started
+
+**Initialization**: To kickstart your journey with the `WFAuthMiddleware` class, let's follow these steps:
+
+```typescript title="Example"
+import { WFAuth, WFAuthMiddleware, WFRoute } from "@xatom/core";
+
+// Initialize the WFAuth instance with user data, roles, and configuration
+const userAuth = new WFAuth<
+  {
+    fullName: string;
+    email: string;
+  },
+  "GUEST" | "USER",
+  {
+    token: string;
+  }
+>();
+
+// Set the default role after initialization
+userAuth.setRole("USER");
+
+// Set user information
+userAuth.setUser({
+  fullName: "John Doe",
+  email: "john@doe.com",
+});
+
+// Create a userMiddleware instance with the WFAuth instance
+const userMiddleware = new WFAuthMiddleware(userAuth);
+
+// Define a WFRoute that allows only non-logged-in users to access the sign-up page
+new WFRoute("/sign-up")
+  .withMiddleware(userMiddleware, "GUEST", "allow", {
+    onError: () => {
+      // If the user's role is not guest, navigate to the dashboard
+      window.location = "/dashboard";
+    },
+  })
+  .execute(() => {
+    // Execute your logic for /sign-up
+  });
+```
+
+#### Syntax
+
+```typescript
+WFAuthMiddleware(auth:WFAuth);
+```
+
+## Methods
+
+The `WFAuthMiddleware` class offers a useful array of properties and methods to enhance the middleware functionality of your web application:
+
+### `allowTo(role)`
+
+The `allowTo` method allows you to validate if the current user role matches the specified role.
+
+```typescript title="Example"
+const userAuth = new WFAuth<
+  {
+    fullName: string;
+    email: string;
+  },
+  "GUEST" | "USER" | "ADMIN",
+  {
+    token: string;
+  }
+>();
+
+// Set the default role after initialization
+userAuth.setRole("USER");
+
+// Set user information
+userAuth.setUser({
+  fullName: "John Doe",
+  email: "john@doe.com",
+});
+
+// Create a userMiddleware instance with the WFAuth instance
+const userMiddleware = new WFAuthMiddleware(userAuth);
+
+const isAllowToGuest = userMiddleware.allowTo("GUEST");
+
+console.log(isAllowToGuest); // false
+
+const isAllowToUser = userMiddleware.allowTo("USER");
+
+console.log(isAllowToUser); // true
+
+const isAllowToAdmin = userMiddleware.allowTo("ADMIN");
+
+console.log(isAllowToAdmin); // false
+```
+
+#### Syntax
+
+```typescript
+allowTo(role: R): boolean
+```
+
+#### Parameters {#allow-parameters}
+
+| Name   | Type                | Description               |
+| ------ | ------------------- | ------------------------- |
+| `role` | `WFUserDefaultRole` | The role to check against |
+
+---
+
+### `disallowedTo(role)`
+
+The `disallowedTo` method allows you to validate if the current user role does not match the specified role.
+
+```typescript title="Example"
+const userAuth = new WFAuth<
+  {
+    fullName: string;
+    email: string;
+  },
+  "GUEST" | "USER" | "ADMIN",
+  {
+    token: string;
+  }
+>();
+
+// Set the default role after initialization
+userAuth.setRole("USER");
+
+// Set user information
+userAuth.setUser({
+  fullName: "John Doe",
+  email: "john@doe.com",
+});
+
+// Create a userMiddleware instance with the WFAuth instance
+const userMiddleware = new WFAuthMiddleware(userAuth);
+
+const isDisallowToGuest = userMiddleware.disallowedTo("GUEST");
+
+console.log(isDisallowToGuest); // true
+
+const isDisallowToUser = userMiddleware.disallowedTo("USER");
+
+console.log(isDisallowToUser); // false
+
+const isDisallowToAdmin = userMiddleware.disallowedTo("ADMIN");
+
+console.log(isDisallowToAdmin); // true
+```
+
+#### Syntax
+
+```typescript
+disallowedTo(role: R): boolean
+```
+
+#### Parameters {#disallow-parameters}
+
+| Name   | Type                | Description               |
+| ------ | ------------------- | ------------------------- |
+| `role` | `WFUserDefaultRole` | The role to check against |
+
+---
+
+### `getAuth()`
+
+The `getAuth` method returns the `WFAuth` instance.
+
+```typescript title="Example"
+// Initialize a WFAuth instance
+const userAuth = new WFAuth<
+  {
+    fullName: string;
+    email: string;
+  },
+  "GUEST" | "USER" | "ADMIN",
+  {
+    token: string;
+  }
+>();
+
+// Set the default role after initialization
+userAuth.setRole("USER");
+
+// Set user information
+userAuth.setUser({
+  fullName: "John Doe",
+  email: "john@doe.com",
+});
+
+// Create a userMiddleware instance with the WFAuth instance
+const userMiddleware = new WFAuthMiddleware(userAuth);
+
+// Retrieve the WFAuth instance using the `getAuth` method
+const userMiddlewareAuth = userMiddleware.getAuth();
+
+console.log(userMiddlewareAuth); // WFAuth instance
+```
+
+#### Syntax
+
+```typescript
+getAuth(): WFAuth
+```

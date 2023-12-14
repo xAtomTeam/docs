@@ -1,0 +1,29 @@
+The `onReady` function in the xAtom framework is a useful utility that ensures your code is executed only when all web page resources have been fully loaded.
+
+## Getting Started
+
+To begin using the `onReady` function, follow these steps:
+
+> #### Pro Tip
+>
+> Use `onReady` as the entry point of your xAtom project. Place the `onReady` function in your project's entry file.
+
+```typescript title="Example"
+import { onReady } from "@xatom/core";
+
+onReady(() => {
+  // Add your business logic here
+});
+```
+
+#### Syntax
+
+```typescript
+onReady(cb: () => void): void
+```
+
+#### Parameter
+
+| Name | Type       | Description         |
+| ---- | ---------- | ------------------- |
+| `cb` | `function` | A callback function |

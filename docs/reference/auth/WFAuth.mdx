@@ -1,0 +1,415 @@
+The `WFAuth` class is your go-to authentication blueprint for web applications within the xAtom Framework. With `WFAuth`, you gain access to a world of possibilities:
+
+- **Role-Based Support:** Seamlessly manage user privileges based on roles. 👥
+- **Configure User Information:** Easily set and manage user details such as email and display name. 🔧
+- **Multiple Instances:** Create and manage multiple `WFAuth` instances for versatility. 🔄
+- **Flexible and Extensible:** Easily adapt and extend `WFAuth` to meet your project's unique requirements. 🛠️
+
+Empower your web application with the flexibility and security of `WFAuth`! 💪🔐
+
+## Getting Started
+
+**Initialization**: To begin using the `WFAuth` class, follow these steps:
+
+> #### Pro Tip
+>
+> It's considered best practice to configure with types. these enable TypeScript validation in your favorite IDE or during transpilation.
+
+```typescript title="Example"
+import { WFAuth } from "@xatom/core";
+
+// Initialize the WFAuth instance with user data, roles, and configuration
+const userAuth = new WFAuth<
+  {
+    fullName: string;
+    email: string;
+  },
+  "GUEST" | "USER",
+  {
+    token: string;
+  }
+>();
+
+// Set the default role after initialization
+userAuth.setRole("GUEST");
+
+// Check if the user is logged in (should return false)
+console.log(userAuth.isLoggedIn()); // false
+
+// Set user information
+userAuth.setUser({
+  fullName: "John Doe",
+  email: "john@doe.com",
+});
+
+// Configure the user's token
+userAuth.setConfig({
+  token: "XYZ",
+});
+
+// Change the user's role
+userAuth.setRole("USER");
+
+// Check if the user is logged in (should return true)
+console.log(userAuth.isLoggedIn()); // true
+
+// Log the user out
+userAuth.logout();
+
+// Check if the user is logged in after logout (should return false)
+console.log(userAuth.isLoggedIn()); // false
+```
+
+#### Syntax
+
+```typescript
+WFAuth<U = WFUserDefaultType, R = WFUserDefaultRole, C = WFAuthConfig>(config?:C);
+```
+
+## Methods
+
+The `WFAuth` class provides an extensive set of properties and methods to enhance the security of your web application:
+
+### `setUser(user)`
+
+The `setUser` method allows you to set user information, such as the user's name and email address, as needed for your application.
+
+```typescript title="Example"
+// Initialize a WFAuth instance
+const userAuth = new WFAuth<
+  {
+    fullName: string;
+    email: string;
+  },
+  "GUEST" | "USER",
+  {
+    token: string;
+  }
+>();
+
+// Set user information using the `setUser` method.
+userAuth.setUser({
+  fullName: "John Doe",
+  email: "john@doe.com",
+});
+```
+
+#### Syntax
+
+```typescript
+setUser(user: U): void
+```
+
+#### Parameters {#set-user-parameters}
+
+| Name   | Type                | Description                            |
+| ------ | ------------------- | -------------------------------------- |
+| `user` | `WFUserDefaultType` | An object containing user information. |
+
+---
+
+### `getUser()`
+
+The `getUser` method allows you to retrieve user information stored within the `WFAuth` instance.
+
+```typescript title="Example"
+// Initialize a WFAuth instance
+const userAuth = new WFAuth<
+  {
+    fullName: string;
+    email: string;
+  },
+  "GUEST" | "USER",
+  {
+    token: string;
+  }
+>();
+
+// Set user information using the `setUser` method.
+userAuth.setUser({
+  fullName: "John Doe",
+  email: "john@doe.com",
+});
+
+// Retrieve user information using the `getUser` method.
+const userInfo = userAuth.getUser();
+console.log(userInfo); // {fullName: "John Doe", email: "john@doe.com"}
+```
+
+#### Syntax
+
+```typescript
+getUser(): U
+```
+
+---
+
+### `setRole(role)`
+
+The `setRole` method allows you to set the user's role, specifying whether they are a `GUEST`, `USER`, `VIP`, or `ADMIN`. enabling role-based access control in your application.
+
+#### Example
+
+```typescript title="Example"
+// Initialize a WFAuth instance
+const userAuth = new WFAuth<
+  {
+    fullName: string;
+    email: string;
+  },
+  "GUEST" | "USER",
+  {
+    token: string;
+  }
+>();
+
+// Set user information using the `setUser` method.
+userAuth.setUser({
+  fullName: "John Doe",
+  email: "john@doe.com",
+});
+
+// Set the user's role to "USER"
+userAuth.setRole("USER");
+```
+
+#### Syntax
+
+```typescript
+setRole(role: R): void
+```
+
+#### Parameters {#set-role-parameters}
+
+| Name   | Type                | Description |
+| ------ | ------------------- | ----------- |
+| `role` | `WFUserDefaultRole` | User role   |
+
+---
+
+### `getRole()`
+
+The `getRole` method allows you to retrieve user role information stored within the `WFAuth` instance.
+
+#### Example
+
+```typescript title="Example"
+// Initialize a WFAuth instance
+const userAuth = new WFAuth<
+  {
+    fullName: string;
+    email: string;
+  },
+  "GUEST" | "USER",
+  {
+    token: string;
+  }
+>();
+
+// Set user information using the `setUser` method.
+userAuth.setUser({
+  fullName: "John Doe",
+  email: "john@doe.com",
+});
+
+// Set the user's role to "USER"
+userAuth.setRole("USER");
+
+// Retrieve user role information using the `getRole` method.
+const userRole = userAuth.getRole();
+console.log(userRole); // USER
+
+// Set the user's role to "GUEST"
+userAuth.setRole("GUEST");
+
+// Retrieve user role information using the `getRole` method.
+const newUserRole = userAuth.getRole();
+console.log(newUserRole); // GUEST
+```
+
+#### Syntax
+
+```typescript
+getRole(): R
+```
+
+---
+
+### `setConfig(config)`
+
+The `setConfig` method allows you to set user extra configuration, such as tokens, refresh tokens, or current user status, based on your requirements.
+
+#### Example
+
+```typescript title="Example"
+// Initialize a WFAuth instance
+const userAuth = new WFAuth<
+  {
+    fullName: string;
+    email: string;
+  },
+  "GUEST" | "USER",
+  {
+    token: string;
+  }
+>();
+
+// Set user information using the `setUser` method.
+userAuth.setUser({
+  fullName: "John Doe",
+  email: "john@doe.com",
+});
+
+// Set user config information using the `setConfig` method.
+userAuth.setConfig({
+  token: "xyz",
+});
+```
+
+#### Syntax
+
+```typescript
+setConfig(config: C): void
+```
+
+#### Parameters {#set-role-parameters}
+
+| Name     | Type           | Description        |
+| -------- | -------------- | ------------------ |
+| `config` | `WFAuthConfig` | User config object |
+
+---
+
+### `getConfig()`
+
+The `getConfig` method allows you to retrieve configuration information stored within the `WFAuth` instance.
+
+#### Example
+
+```typescript title="Example"
+// Initialize a WFAuth instance
+const userAuth = new WFAuth<
+  {
+    fullName: string;
+    email: string;
+  },
+  "GUEST" | "USER",
+  {
+    token: string;
+  }
+>();
+
+// Set user information using the `setUser` method.
+userAuth.setUser({
+  fullName: "John Doe",
+  email: "john@doe.com",
+});
+
+// Set user config information using the `setConfig` method.
+userAuth.setConfig({
+  token: "xyz",
+});
+
+// Retrieve user config information using the `getConfig` method.
+const config = userAuth.getConfig();
+console.log(config); // {token:"xyz"}
+```
+
+#### Syntax
+
+```typescript
+getConfig(): C
+```
+
+---
+
+### `isLoggedIn()`
+
+The `isLoggedIn` method allows you to check whether a user is currently logged in and if user data is stored.
+
+#### Example
+
+```typescript title="Example"
+// Initialize a WFAuth instance
+const userAuth = new WFAuth<
+  {
+    fullName: string;
+    email: string;
+  },
+  "GUEST" | "USER",
+  {
+    token: string;
+  }
+>();
+
+// Check if the user is initially logged in (should be false)
+const isLoggedIn = userAuth.isLoggedIn();
+console.log(isLoggedIn); // false
+
+// Set user information using the `setUser` method.
+userAuth.setUser({
+  fullName: "John Doe",
+  email: "john@doe.com",
+});
+
+// Set the user's role to "USER"
+userAuth.setRole("USER");
+
+// Check if the user is now logged in (should be true)
+const isNowLoggedIn = userAuth.isLoggedIn();
+console.log(isNowLoggedIn); // true
+```
+
+#### Syntax
+
+```typescript
+isLoggedIn(): boolean
+```
+
+---
+
+### `logout()`
+
+The `logout` method allows you to clear all stored information about the user, including user data, user config, and user role.
+
+#### Example
+
+```typescript title="Example"
+// Initialize a WFAuth instance
+const userAuth = new WFAuth<
+  {
+    fullName: string;
+    email: string;
+  },
+  "GUEST" | "USER",
+  {
+    token: string;
+  }
+>();
+
+// Set user information using the `setUser` method.
+userAuth.setUser({
+  fullName: "John Doe",
+  email: "john@doe.com",
+});
+
+// Set the user's role to "USER"
+userAuth.setRole("USER");
+
+// Check if the user is initially logged in (should be true)
+const isLoggedIn = userAuth.isLoggedIn();
+console.log(isLoggedIn); // true
+
+// Log the user out
+userAuth.logout();
+
+// Check if the user is now logged out (should be false)
+const isNowLoggedIn = userAuth.isLoggedIn();
+console.log(isNowLoggedIn); // false
+```
+
+#### Syntax
+
+```typescript
+logout(): void
+```

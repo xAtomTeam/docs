@@ -1,0 +1,395 @@
+The `WFDynamicList` class is a powerful component within the xAtom framework that enables you to create dynamic lists seamlessly. Whether your application is fetching data from a REST API, GraphQL, or any other API source, the `WFDynamicList` provides essential functionality to render lists with ease. This class not only handles loading and empty states out of the box but also gives you full control over how your list items are rendered.
+
+## Getting Started
+
+#### Basic List structure
+
+To effectively use the WFDynamicList component within the xAtom framework, ensure that your list component is structured as follows in Webflow:
+
+```bash
+div (my-list)
+├── div (my-list-item)
+├── div (my-list-loader)
+└── div (my-list-empty-state)
+```
+
+This structure is essential for the proper functioning of the WFDynamicList component. Make sure that your webflow elements match this hierarchy to seamlessly integrate dynamic lists into your web applicatio
+
+#### Initialization
+
+To get started with the `WFDynamicList` class, you'll need to initialize it and provide the necessary configuration options. Here's a step-by-step guide on how to begin:
+
+```typescript title="Example"
+import { WFDynamicList } from "@xatom/core";
+
+// Initialize a new instance of WFDynamicList
+const list = new WFDynamicList<string>(".my-list", {
+  rowSelector: ".my-list-item", // CSS selector for list items
+  loaderSelector: ".my-list-loader", // Optional CSS selector for loading state
+  emptySelector: ".my-list-empty-state", // Optional selector for empty state
+});
+
+// Customize the rendering of list items
+list.rowRenderer(({ rowData, rowElement }) => {
+  // Modify the rowElement component as needed
+  return rowElement;
+});
+
+// Set the data to be displayed in the dynamic list
+list.setData(["Item 1", "Item 2"]);
+```
+
+In this example:
+
+- We create a new instance of `WFDynamicList` by providing a query selector (`.my-list`) that matches the container element where you want to render the list.
+- We configure the list by specifying the `rowSelector`, which is a query selector that identifies individual list items within the dynamic list.
+- Optionally, we specify the `loaderSelector` and `emptySelector`, which are query selectors for loading and empty state elements. These selectors are used to display loading and empty states when necessary.
+- We define a `rowRenderer` function that allows you to customize the rendering of list items based on the provided data.
+- Finally, we set the data for the dynamic list using the `setData` method.
+
+With these steps, you're ready to create dynamic lists in your web application using the `WFDynamicList` class. You can now proceed to customize and further enhance your dynamic lists according to your project's requirements.
+
+**Syntax**
+
+```typescript
+new WFDynamicList(selector, configuration);
+```
+
+> #### Note
+>
+> **Compatibility with `WFComponent`**
+>
+> The `WFDynamicList` seamlessly extends the capabilities of the `WFComponent` class. This means that all the properties and methods available in `WFComponent` are fully compatible and can be used with `WFDynamicList`. This compatibility provides you with a wide range of options for enhancing and customizing the behavior of your dynamic lists. Feel free to leverage the power of both components to achieve your desired results efficiently.
+
+## Selector Parameter
+
+The selector parameter within `WFDynamicList` is versatile and can accept one of the following types:
+
+- A string that precisely matches a valid CSS selector.
+- An HTMLElement representing a specific element in the document.
+- An existing `WFComponent` instance.
+
+## Configuration Object
+
+Along with selector parameter you'll need to provide a configuration object that includes the following properties:
+
+| Property         | Accepted Types                                                 | Required |
+| ---------------- | -------------------------------------------------------------- | -------- |
+| `rowSelector`    | A string matching a valid CSS selector, e.g., `".list-item"`   | Required |
+|                  | An HTMLElement representing a specific element in the document |          |
+|                  | An existing `WFComponent` instance                             |          |
+| `loaderSelector` | A string matching a valid CSS selector, e.g., `".loader"`      | Optional |
+|                  | An HTMLElement representing a specific element in the document |          |
+|                  | An existing `WFComponent` instance                             |          |
+| `emptySelector`  | A string matching a valid CSS selector, e.g., `".empty-state"` | Optional |
+|                  | An HTMLElement representing a specific element in the document |          |
+|                  | An existing `WFComponent` instance                             |          |
+
+By using these selectors, you can configure the `WFDynamicList` class to interact with your web page's structure, customize how list items are selected, and control the display of loading and empty states. The flexibility to accept different types of selectors makes the `WFDynamicList` class adaptable to various web application scenarios.
+
+## Methods
+
+### `rowRenderer(fn)`
+
+This method allows you to customize the rendering of list items by providing a callback function. The callback function receives an object `params` with `rowData`, representing the data for the current list item; `rowElement`, representing a copy of the row component; `data`, the array which was set using `setData`; and `index`, the index of the currently rendering item. You can modify the `rowElement` and return it to control how list items are rendered.
+
+```typescript title="Example"
+// Initialize a new instance of WFDynamicList
+const list = new WFDynamicList<string>(".my-list", {
+  rowSelector: ".my-list-item", // CSS selector for list items
+  loaderSelector: ".my-list-loader", // Optional CSS selector for loading state
+  emptySelector: ".my-list-empty-state", // Optional selector for empty state
+});
+
+// Customize the rendering of list items
+list.rowRenderer(({ rowData, rowElement }) => {
+  // Access a child component within the list item
+  const removeBtn =
+    rowElement.getChildAsComponent(".remove-btn");
+
+  // Add a click event listener to the remove button
+  removeBtn.on("click", () => {
+    console.log("removeBtn clicked");
+  });
+
+  // Update the text of a heading element within the list item
+  rowElement.updateTextViaAttrVar({
+    title: rowData.title, // Assuming rowData contains a 'title' property
+  });
+
+  // Return the modified rowElement component
+  return rowElement;
+});
+
+// Set the data to be displayed in the dynamic list
+list.setData(["Item 1", "Item 2"]);
+```
+
+#### Syntax
+
+```typescript
+rowRenderer(
+  fn: (
+    params: {
+      rowData: any;
+      rowElement: WFComponent;
+      data: any[];
+      index: number
+       }
+    ) => WFComponent
+  ): void
+```
+
+#### Parameters {#row-renderer-parameter}
+
+| Name | Type       | Description                                                                            |
+| ---- | ---------- | -------------------------------------------------------------------------------------- |
+| `fn` | `function` | A callback function that receives parameters to customize the rendering of list items. |
+
+#### Callback Function Parameters {#row-renderer-fn-parameter}
+
+| Name         | Type             | Description                                            |
+| ------------ | ---------------- | ------------------------------------------------------ |
+| `rowData`    | `T`              | The data object representing the current list item.    |
+| `rowElement` | `WFComponent<R>` | A copy of the row component for customization.         |
+| `data`       | `Array<T>`       | The array of data items set using `setData`.           |
+| `index`      | `number`         | The index of the currently rendering item in the list. |
+
+This method empowers you to have precise control over the rendering of list items, enabling you to create a tailored and dynamic user interface for your application's list components.
+
+---
+
+### `setData(data)`
+
+Use this method to set the data for the dynamic list. You need to pass an array `data` containing the list items. The `data` array can consist of objects, strings, numbers, or any other valid data types that represent the content of the list.
+
+```typescript title="Example"
+// Initialize a new instance of WFDynamicList
+const list = new WFDynamicList<string>(".my-list", {
+  rowSelector: ".my-list-item", // CSS selector for list items
+  loaderSelector: ".my-list-loader", // Optional CSS selector for loading state
+  emptySelector: ".my-list-empty-state", // Optional selector for empty state
+});
+
+// Customize the rendering of list items
+list.rowRenderer(({ rowData, rowElement }) => {
+  // Return the modified rowElement component
+  return rowElement;
+});
+
+// Set the data to be displayed in the dynamic list
+list.setData(["Item 1", "Item 2"]);
+```
+
+#### Syntax
+
+```typescript
+setData(data:T[]):void
+```
+
+#### Parameters {#set-data-parameter}
+
+| Name   | Type  | Description                                                                                                                      |
+| ------ | ----- | -------------------------------------------------------------------------------------------------------------------------------- |
+| `data` | `T[]` | The `data` array can consist of objects, strings, numbers, or any other valid data types that represent the content of the list. |
+
+This method allows you to update the dynamic list with new data, making it easy to refresh the list with updated or different content as needed.
+
+---
+
+### `loaderRenderer(fn)`
+
+This method takes a callback function to control the rendering of the loading state. When invoked, the function should return an `WFComponent` instance representing the loading state of the dynamic list.
+
+```typescript title="Example"
+// Initialize a new instance of WFDynamicList
+const list = new WFDynamicList<string>(".my-list", {
+  rowSelector: ".my-list-item", // CSS selector for list items
+  loaderSelector: ".my-list-loader", // Optional CSS selector for loading state
+  emptySelector: ".my-list-empty-state", // Optional selector for empty state
+});
+
+// Customize the rendering of list items
+list.rowRenderer(({ rowData, rowElement }) => {
+  // Return the modified rowElement component
+  return rowElement;
+});
+
+// Customize the rendering of loader
+list.loaderRenderer((loader) => {
+  // Customize the loader component as needed
+  const loadingText =
+    loader.getChildAsComponent(".loading-text");
+  loadingText.setText("Please wait..."); // Update loading text
+  loader.setStyle({
+    backgroundColor: "#fff", // Change background color
+  });
+
+  // Return the modified loader component
+  return loader;
+});
+
+// Set the data to be displayed in the dynamic list
+list.setData(["Item 1", "Item 2"]);
+```
+
+#### Syntax
+
+```typescript
+loaderRenderer(fn: (loaderElement:WFComponent) => WFComponent): void
+```
+
+#### Parameters {#loader-parameter}
+
+| Name | Type       | Description                                                                        |
+| ---- | ---------- | ---------------------------------------------------------------------------------- |
+| `fn` | `function` | A callback function that receives parameters to customize the rendering of loader. |
+
+#### Callback Function Parameters {#loader-fn-parameter}
+
+| Name            | Type             | Description                                       |
+| --------------- | ---------------- | ------------------------------------------------- |
+| `loaderElement` | `WFComponent<L>` | A copy of the loader component for customization. |
+
+This method allows you to customize the appearance and behavior of the loading state in the dynamic list, giving you full control over how it's presented to users.
+
+---
+
+### `changeLoadingStatus(status)`
+
+The `changeLoadingStatus` method allows you to change the loading status of the dynamic list by passing a boolean value `status`. If the list contains items and the loading status is set to `true`, a loader will be displayed at the bottom of the list.
+
+```typescript title="Example"
+// Initialize a new instance of WFDynamicList
+const list = new WFDynamicList<string>(".my-list", {
+  rowSelector: ".my-list-item", // CSS selector for list items
+  loaderSelector: ".my-list-loader", // Optional CSS selector for loading state
+  emptySelector: ".my-list-empty-state", // Optional selector for empty state
+});
+
+const loadMoreBtn = new WFComponent(".load-more-btn");
+
+// Customize the rendering of list items
+list.rowRenderer(({ rowData, rowElement }) => {
+  // Return the modified rowElement component
+  return rowElement;
+});
+
+loadMoreBtn.on("click", () => {
+  // Enable the loading state
+  list.changeLoadingStatus(true);
+  // Perform additional actions here (e.g., fetching more data)
+
+  // Disable the loading state
+  list.changeLoadingStatus(false);
+});
+
+// Set the data to be displayed in the dynamic list
+list.setData(["Item 1", "Item 2"]);
+```
+
+#### Syntax
+
+```typescript
+changeLoadingStatus(status: boolean): void
+```
+
+#### Parameters {#loading-parameter}
+
+| Name     | Type      | Description                |
+| -------- | --------- | -------------------------- |
+| `status` | `boolean` | Indicate the loading state |
+
+This method provides control over when and how the loading state is displayed in the dynamic list, giving you the flexibility to manage the loading behavior according to your application's requirements.
+
+---
+
+### `emptyRenderer(fn)`
+
+This method enables you to customize the rendering of the empty state of the dynamic list. It takes a callback function that should return an `WFComponent` representing the empty state when invoked. The empty state will automatically render when the list is empty.
+
+```typescript title="Example"
+// Initialize a new instance of WFDynamicList
+const list = new WFDynamicList<string>(".my-list", {
+  rowSelector: ".my-list-item", // CSS selector for list items
+  loaderSelector: ".my-list-loader", // Optional CSS selector for loading state
+  emptySelector: ".my-list-empty-state", // Optional selector for empty state
+});
+
+// Customize the rendering of list items
+list.rowRenderer(({ rowData, rowElement }) => {
+  // Return the modified rowElement component
+  return rowElement;
+});
+
+// Customize the rendering of empty state
+list.emptyRenderer((emptyStateElement) => {
+  // Customize the empty state component as needed
+  const emptyText =
+    emptyStateElement.getChildAsComponent(".empty-text");
+  emptyText.setText(
+    isSearchResult ? "No Item Found" : "Looks like list is empty"
+  ); // Update empty state text
+
+  // Return the modified empty state component
+  return emptyStateElement;
+});
+
+// Set the data to be displayed in the dynamic list
+list.setData(["Item 1", "Item 2"]);
+```
+
+#### Syntax
+
+```typescript
+emptyRenderer(fn: (emptyStateElement:WFComponent) => WFComponent): void
+```
+
+#### Parameters {#empty-parameter}
+
+| Name | Type       | Description                                                                             |
+| ---- | ---------- | --------------------------------------------------------------------------------------- |
+| `fn` | `function` | A callback function that receives parameters to customize the rendering of empty state. |
+
+#### Callback Function Parameters {#empty-fn-parameter}
+
+| Name                | Type             | Description                                            |
+| ------------------- | ---------------- | ------------------------------------------------------ |
+| `emptyStateElement` | `WFComponent<L>` | A copy of the empty state component for customization. |
+
+This method allows you to have complete control over how the empty state of the dynamic list is displayed. You can design and customize the empty state component to provide a meaningful and engaging user experience when the list is empty.
+
+---
+
+### `forceRender()`
+
+Use the `forceRender` method to forcefully re-render the dynamic list. This method is particularly useful when you want to refresh the list display after making changes using `setData` or other methods.
+
+```typescript title="Example"
+// Initialize a new instance of WFDynamicList
+const list = new WFDynamicList<string>(".my-list", {
+  rowSelector: ".my-list-item", // CSS selector for list items
+  loaderSelector: ".my-list-loader", // Optional CSS selector for loading state
+  emptySelector: ".my-list-empty-state", // Optional selector for empty state
+});
+
+// Customize the rendering of list items
+list.rowRenderer(({ rowData, rowElement }) => {
+  // Return the modified rowElement component
+  return rowElement;
+});
+
+// Set the data to be displayed in the dynamic list
+list.setData(["Item 1", "Item 2"]);
+
+// Trigger a force render to refresh the list
+list.forceRender();
+```
+
+#### Syntax
+
+```typescript
+forceRender(): void
+```
+
+These methods provide you with the flexibility to control the rendering of list items, loading states, and empty states, ensuring a seamless and customized user experience when working with dynamic lists in your web application.
