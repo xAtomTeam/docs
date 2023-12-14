@@ -148,15 +148,15 @@ const config = {
   favicon: "img/favicon.ico",
 
   // Set the production url of your site here
-  url: "https://your-docusaurus-test-site.com",
+  url: "https://xatomteam.github.io",
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: "/",
+  baseUrl: "/docs/",
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
-  organizationName: "virat21", // Usually your GitHub org/user name.
-  projectName: "xatom", // Usually your repo name.
+  organizationName: "xAtomTeam", // Usually your GitHub org/user name.
+  projectName: "docs", // Usually your repo name.
 
   onBrokenLinks: "throw",
   onBrokenMarkdownLinks: "warn",
@@ -175,19 +175,21 @@ const config = {
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
         docs: {
+          path: "./guide",
+          routeBasePath: "guide",
           sidebarPath: require.resolve("./sidebars.js"),
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
-          editUrl:
-            "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/",
+          // editUrl:
+          //   "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/",
         },
-        blog: {
-          showReadingTime: true,
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
-          editUrl:
-            "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/",
-        },
+        // blog: {
+        //   showReadingTime: true,
+        //   // Please change this to your repo.
+        //   // Remove this to remove the "edit this page" links.
+        //   editUrl:
+        //     "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/",
+        // },
         theme: {
           customCss: require.resolve("./src/css/custom.css"),
         },
@@ -204,7 +206,7 @@ const config = {
       navbar: {
         title: "xAtom",
         logo: {
-          alt: "My Site Logo",
+          alt: "xAtom Logo",
           src: "img/logo.svg",
         },
         items: [
@@ -214,9 +216,9 @@ const config = {
             position: "left",
             label: "Docs",
           },
-          { to: "/blog", label: "Blog", position: "left" },
+          // { to: "/blog", label: "Blog", position: "left" },
           {
-            href: "https://github.com/facebook/docusaurus",
+            href: "https://github.com/xAtomTeam/docs",
             label: "GitHub",
             position: "right",
           },
@@ -230,7 +232,7 @@ const config = {
             items: [
               {
                 label: "Tutorial",
-                to: "/docs/Installation",
+                to: "/docs/guide/Installation",
               },
             ],
           },
@@ -254,18 +256,18 @@ const config = {
           {
             title: "More",
             items: [
-              {
-                label: "Blog",
-                to: "/blog",
-              },
+              // {
+              //   label: "Blog",
+              //   to: "/blog",
+              // },
               {
                 label: "GitHub",
-                href: "https://github.com/facebook/docusaurus",
+                href: "https://github.com/xAtomTeam",
               },
             ],
           },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} xAtom. Made with ❤️ by Virat Patel`,
+        copyright: `Copyright © ${new Date().getFullYear()} xAtom. Made with ❤️ by <a href="https://twitter.com/patel_virat" target="_blank">Virat Patel</a>`,
       },
       prism: {
         theme: lightCodeThemeV1,
