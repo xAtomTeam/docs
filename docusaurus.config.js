@@ -200,6 +200,10 @@ const config = {
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
+      colorMode: {
+        defaultMode: "dark",
+        disableSwitch: true,
+      },
       // Replace with your project's social card
       image: "img/docusaurus-social-card.jpg",
       defaultMode: "dark",
@@ -207,7 +211,7 @@ const config = {
         title: "xAtom",
         logo: {
           alt: "xAtom Logo",
-          src: "img/logo.svg",
+          src: "img/xatom-logo-200.png",
         },
         items: [
           {
