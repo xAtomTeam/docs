@@ -148,10 +148,10 @@ const config = {
   favicon: "img/favicon.ico",
 
   // Set the production url of your site here
-  url: "https://xatomteam.github.io",
+  url: "https://xatom.js.org",
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: "/docs/",
+  baseUrl: "/",
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
@@ -205,7 +205,7 @@ const config = {
         disableSwitch: true,
       },
       // Replace with your project's social card
-      image: "img/docusaurus-social-card.jpg",
+      image: "img/social-card.jpg",
       defaultMode: "dark",
       navbar: {
         title: "xAtom",
@@ -236,7 +236,7 @@ const config = {
             items: [
               {
                 label: "Tutorial",
-                to: "/docs/guide/Installation",
+                to: "/guide/Installation",
               },
             ],
           },
@@ -247,13 +247,13 @@ const config = {
                 label: "Stack Overflow",
                 href: "https://stackoverflow.com/questions/tagged/xatom",
               },
-              {
-                label: "Discord",
-                href: "https://discordapp.com/invite/xatom",
-              },
+              // {
+              //   label: "Discord",
+              //   href: "https://discordapp.com/invite/xatom",
+              // },
               {
                 label: "Twitter",
-                href: "https://twitter.com/xatom",
+                href: "https://twitter.com/patel_virat",
               },
             ],
           },

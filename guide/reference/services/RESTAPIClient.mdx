@@ -1,5 +1,10 @@
 # REST API Client
 
+```mdx-code-block
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+```
+
 The `AxiosClient` class empowers your web application to effortlessly communicate with custom REST APIs. This robust data service streamlines API interactions, providing developers with a user-friendly and flexible solution. 💼
 
 With `AxiosClient`, you can:
@@ -10,3 +15,372 @@ With `AxiosClient`, you can:
 - 👨‍💻 Organize your UI logic based on data, error, or loading state
 
 ## Getting Started
+
+**Initialization**: To harness the power of `AxiosClient` in your xAtom project, start by installing the `@xatom/axios` package. Then, initialize `AxiosClientConfigurator` and `AxiosClient` as demonstrated in the example below:
+
+### Installing the package
+
+<Tabs>
+<TabItem value="npm" label="npm" default>
+
+```bash title="Terminal"
+npm install @xatom/axios
+```
+
+</TabItem>
+<TabItem value="yarn" label="yarn">
+
+```bash title="Terminal"
+yarn add @xatom/axios
+```
+
+</TabItem>
+<TabItem value="pnpm" label="pnpm">
+
+```bash title="Terminal"
+pnpm add @xatom/axios
+```
+
+</TabItem>
+</Tabs>
+
+```typescript title="Example"
+import {
+  AxiosClient,
+  AxiosClientConfigurator,
+} from "@xatom/axios";
+import { onReady } from "@xatom/core";
+
+// Configure the base URL for your API
+const axiosConfigurator = new AxiosClientConfigurator(
+  "https://your-api-base-url.com"
+);
+
+const axiosClient = new AxiosClient(axiosConfigurator);
+
+onReady(() => {
+  // Define an API request to get users with pagination
+  const getUsers = axiosClient.get<MyUserType>("/users?page=2");
+
+  // Listen to loading state changes
+  getUsers.onLoadingChange((status) => {
+    console.log("Is loading:", status); // true or false
+  });
+
+  // Listen to successful response
+  getUsers.onData((data) => {
+    console.log("Response:", data);
+  });
+
+  // Listen to errors
+  getUsers.onError((error) => {
+    console.error("Error:", error);
+  });
+
+  // Initiate the API request
+  getUsers.fetch();
+});
+```
+
+This example demonstrates using AxiosClient in xAtom to make an asynchronous API request, handling loading states, and logging data or errors.
+
+## Methods
+
+The `AxiosClient` and `AxiosClientConfigurator` classes equip you with a robust set of properties and methods, enhancing your development experience:
+
+**AxiosClientConfigurator Methods**
+
+### `beforeRequest((config, nxtFn) => void)` {#before-request}
+
+The `beforeRequest()` on `AxiosClientConfigurator` method allows you to modify the configuration of the Axios client or logically control whether the request should be made to achieve secure requests.
+
+```typescript title="Example"
+// Initialize the AxiosClientConfigurator with the base API URL
+const axiosConfigurator = new AxiosClientConfigurator(
+  "https://your-api-base-url.com"
+);
+
+// Configure a function to be executed before each request
+axiosConfigurator.beforeRequest((config, nextFn) => {
+  // Modify the request configuration, for example, add an Authorization header
+  config.headers.Authorization = "Bearer MY_TOKEN";
+
+  // Call nextFn to continue with the modified configuration
+  nextFn(config);
+});
+```
+
+**Syntax**
+
+```typescript
+beforeRequest(fn: (config: axiosConfig, nxtFn: (config: axiosConfig) => void) => void): AxiosClientConfigurator;
+```
+
+#### Parameters {#before-request-parameters}
+
+| Name     | Type                            | Description                                                          |
+| -------- | ------------------------------- | -------------------------------------------------------------------- |
+| `fn`     | `(config, nxtFn) => void`       | A function to modify the configuration or decide whether to proceed. |
+| `config` | `axiosConfig`                   | The configuration of the Axios client for the current request.       |
+| `nxtFn`  | `(config: axiosConfig) => void` | A function to proceed with the request, passing the modified config. |
+
+### `retryRequestOnFailed((err, config, retryFn) => void)` {#retry-request}
+
+The `retryRequestOnFailed()` method on `AxiosClientConfigurator` allows you to handle request errors globally and retry the request with a new configuration of the Axios client. This is useful for scenarios like retrying requests on token expiration or timeout.
+
+```typescript title="Example"
+// Initialize the AxiosClientConfigurator with the base API URL
+const axiosConfigurator = new AxiosClientConfigurator(
+  "https://your-api-base-url.com"
+);
+
+// Configure the retry behavior on failed requests
+axiosConfigurator.retryRequestOnFailed(
+  (err, config, retryFn) => {
+    // Check if the error is due to an expired token
+    if (err && err.message === "TOKEN_EXPIRED") {
+      // Get a new token using the refresh token
+      const newToken = getNewTokenWithRefreshToken();
+
+      // If a new token is obtained, update the Authorization header and retry the request
+      if (newToken) {
+        config.headers.Authorization = `Bearer ${newToken}`;
+        retryFn(config);
+      } else {
+        // If no new token is obtained, log out the user
+        logoutUser();
+      }
+    } else {
+      // Handle unknown errors
+    }
+  }
+);
+```
+
+**Syntax**
+
+```typescript
+retryRequestOnFailed(fn: (error: Error, config: axiosConfig, retryFn: (config: axiosConfig) => void) => void): AxiosClientConfigurator;
+```
+
+#### Parameters {#retry-request-parameters}
+
+| Name      | Type                               | Description                                                               |
+| --------- | ---------------------------------- | ------------------------------------------------------------------------- |
+| `fn`      | `(error, config, retryFn) => void` | A function to handle errors and trigger a retry with a new configuration. |
+| `error`   | `Error`                            | The error that occurred during the initial request.                       |
+| `config`  | `axiosConfig`                      | The configuration of the Axios client for the failed request.             |
+| `retryFn` | `(config) => void`                 | A function to retry the request with a new configuration.                 |
+
+### Request Types {#type-of-request}
+
+`AxiosClient` provides support for various HTTP methods:
+
+- The `get()` method allows you to perform `GET` requests.
+- The `post()` method enables `POST` requests.
+- The `patch()` method facilitates `PATCH` requests.
+- The `put()` method is designed for making `PUT` requests.
+- The `delete()` method allows you to initiate `DELETE` requests.
+
+```typescript title="Request Type Examples"
+// Initialize AxiosClient with the configured AxiosClientConfigurator
+const axiosClient = new AxiosClient(axiosConfigurator);
+
+// Example of making a GET request
+const getUser = axiosClient.get("/user", { id: 1 });
+
+// Example of making a POST request
+const postUser = axiosClient.post("/create/user", {
+  fullName: "John doe",
+  age: 21,
+});
+
+// Example of making a PATCH request
+const patchUser = axiosClient.patch("/user", { id: 1, age: 22 });
+
+// Example of making a PUT request
+const putUser = axiosClient.put("/user", {
+  id: 1,
+  bio: "I ❤️ xAtom",
+});
+
+// Example of making a DELETE request
+const deleteUser = axiosClient.delete("/user", { id: 1 });
+```
+
+**Syntax**
+
+```typescript
+get(path: string, requestData: Object): AxiosClientControl;
+post(path: string, requestData: Object): AxiosClientControl;
+patch(path: string, requestData: Object): AxiosClientControl;
+put(path: string, requestData: Object): AxiosClientControl;
+delete(path: string, requestData: Object): AxiosClientControl;
+```
+
+#### Parameters {#request-parameters}
+
+| Name   | Type     | Description                  |
+| ------ | -------- | ---------------------------- |
+| `path` | `string` | Endpoint path                |
+| `data` | `Object` | Data payload for the request |
+
+### `fetch(data,headers)` {#fetch-request}
+
+The `fetch` method in `AxiosClient` allows you to initiate the request programmatically.
+
+```typescript title="Example"
+// Initialize AxiosClient with the configured AxiosClientConfigurator
+const axiosClient = new AxiosClient(axiosConfigurator);
+
+// Example of making a GET request
+const getUser = axiosClient.get("/user");
+
+// Fetch the GET request with data payload
+getUser.fetch({ id: 1 });
+```
+
+**Syntax**
+
+```typescript
+fetch(data: Object?, headers: AxiosHeaders?): Promise<Response>;
+```
+
+#### Parameters {#fetch-request-parameters}
+
+| Name      | Type           | Description                                                   |
+| --------- | -------------- | ------------------------------------------------------------- |
+| `data`    | `Object`       | Optional data argument to send payload along with the request |
+| `headers` | `AxiosHeaders` | Optional Axios headers to be sent with the request            |
+
+### `onLoadingChange(fn)` {#loading-change-request}
+
+The `onLoadingChange` method in `AxiosClient` enables you to listen to changes in the loading status of a request, indicating whether the request is in progress or completed. Your application can incorporate multiple instances of the `onLoadingChange` method to handle various loading status scenarios.
+
+```typescript title="Example"
+// Initialize AxiosClient with the configured AxiosClientConfigurator
+const axiosClient = new AxiosClient(axiosConfigurator);
+
+// Example of making a GET request
+const getUser = axiosClient.get("/user");
+
+// Listen to request loading status changes
+getUser.onLoadingChange((status) => {
+  console.log(status); // Output: true (request in progress) or false (request done)
+});
+
+// Fetch the GET request with data payload
+getUser.fetch({ id: 1 });
+```
+
+**Syntax**
+
+```typescript
+onLoadingChange(fn: (status: boolean) => void): void;
+```
+
+#### Parameters {#loading-change-parameters}
+
+| Name     | Type                        | Description                      |
+| -------- | --------------------------- | -------------------------------- |
+| `fn`     | `(status: boolean) => void` | Listener function                |
+| `status` | `boolean`                   | Status to identify request state |
+
+### `onLoadingChangeOnce(fn)` {#loading-once-change-request}
+
+The `onLoadingChangeOnce` method in `AxiosClient` allows you to listen for changes in the loading status of a request once, indicating whether the request is in progress or completed. This method is particularly useful when you only need to observe the loading change once, making it suitable for scenarios where the same request may be called multiple times in your application.
+
+```typescript title="Example"
+// Initialize AxiosClient with the configured AxiosClientConfigurator
+const axiosClient = new AxiosClient(axiosConfigurator);
+
+// Example of making a GET request
+const getUser = axiosClient.get("/user");
+
+// Listen to request loading status changes
+getUser.onLoadingChangeOnce((status) => {
+  console.log(status); // Output: true (request in progress) or false (request done)
+});
+
+// Fetch the GET request with data payload
+getUser.fetch({ id: 1 });
+```
+
+**Syntax**
+
+```typescript
+onLoadingChangeOnce(fn: (status: boolean) => void): void;
+```
+
+#### Parameters {#loading-once-change-parameters}
+
+| Name     | Type                        | Description                      |
+| -------- | --------------------------- | -------------------------------- |
+| `fn`     | `(status: boolean) => void` | Listener function                |
+| `status` | `boolean`                   | Status to identify request state |
+
+### `onData(fn)` {#data-change-request}
+
+The `onData` method in `AxiosClient` enables you to listen to and read the success response data each time `fetch` has been called. `onData` will only be triggered when the request is successful. Your application can have multiple `onData` callbacks.
+
+```typescript title="Example"
+// Initialize AxiosClient with the configured AxiosClientConfigurator
+const axiosClient = new AxiosClient(axiosConfigurator);
+
+// Example of making a GET request
+const getUser = axiosClient.get<DataType>("/user");
+
+// Listen to the request's success response
+getUser.onData((data: DataType) => {
+  console.log(data); // Output: request success response
+});
+
+// Fetch the GET request with data payload
+getUser.fetch({ id: 1 });
+```
+
+**Syntax**
+
+```typescript
+onData<DataType>(fn: (data: DataType) => void): void;
+```
+
+#### Parameters {#data-change-parameters}
+
+| Name   | Type                       | Description       |
+| ------ | -------------------------- | ----------------- |
+| `fn`   | `(data: DataType) => void` | Listener function |
+| `data` | `DataType`                 | Response data     |
+
+### `onDataOnce(fn)` {#data-once-change-request}
+
+The `onDataOnce` method in `AxiosClient` enables you to listen to and read the success response data once when `fetch` has been called for first time. `onDataOnce` will only be triggered when the request is successful. Your application can have multiple `onDataOnce` callbacks.
+
+```typescript title="Example"
+// Initialize AxiosClient with the configured AxiosClientConfigurator
+const axiosClient = new AxiosClient(axiosConfigurator);
+
+// Example of making a GET request
+const getUser = axiosClient.get<DataType>("/user");
+
+// Listen to the request's success response
+getUser.onDataOnce((data: DataType) => {
+  console.log(data); // Output: request success response
+});
+
+// Fetch the GET request with data payload
+getUser.fetch({ id: 1 });
+```
+
+**Syntax**
+
+```typescript
+onDataOnce<DataType>(fn: (data: DataType) => void): void;
+```
+
+#### Parameters {#data-once-change-parameters}
+
+| Name   | Type                       | Description       |
+| ------ | -------------------------- | ----------------- |
+| `fn`   | `(data: DataType) => void` | Listener function |
+| `data` | `DataType`                 | Response data     |
