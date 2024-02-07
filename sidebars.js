@@ -26,7 +26,7 @@ const sidebars = {
     {
       type: "category",
       label: "API Reference",
-
+      collapsed: false,
       items: [
         "reference/Overview",
 
@@ -34,21 +34,28 @@ const sidebars = {
           type: "category",
 
           label: "Components",
+          collapsed: false,
+
           items: [
             "reference/components/WFComponent",
             "reference/components/WFDynamicList",
             "reference/components/WFFormComponent",
             "reference/components/WFInvisibleForm",
+            "reference/components/WFImage",
           ],
         },
         {
           type: "category",
           label: "Routing",
+          collapsed: false,
+
           items: ["reference/routing/WFRoute"],
         },
         {
           type: "category",
           label: "Authentication",
+          collapsed: false,
+
           items: [
             "reference/auth/WFAuth",
             "reference/auth/WFAuthMiddleware",
@@ -58,6 +65,8 @@ const sidebars = {
         {
           type: "category",
           label: "Utilities",
+          collapsed: false,
+
           items: [
             "reference/utils/onReady",
             "reference/utils/navigate",
@@ -67,6 +76,8 @@ const sidebars = {
         {
           type: "category",
           label: "Data Services",
+          collapsed: false,
+
           items: [
             "reference/services/RESTAPIClient",
             "reference/services/GraphQLClient",

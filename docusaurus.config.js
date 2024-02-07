@@ -146,7 +146,7 @@ const config = {
   tagline:
     "Supercharge Your Webflow Creations into Dynamic Web Apps",
   favicon: "img/favicon.ico",
-
+  trailingSlash: true,
   // Set the production url of your site here
   url: "https://xatom.js.org",
   // Set the /<baseUrl>/ pathname under which your site is served
@@ -174,6 +174,10 @@ const config = {
       "classic",
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
+        gtag: {
+          trackingID: "G-Q42XJ0SL23",
+          anonymizeIP: true,
+        },
         docs: {
           path: "./guide",
           routeBasePath: "guide",
@@ -236,7 +240,7 @@ const config = {
             items: [
               {
                 label: "Tutorial",
-                to: "/guide/Installation",
+                to: "/guide/Installation/",
               },
             ],
           },
@@ -276,6 +280,35 @@ const config = {
       prism: {
         theme: lightCodeThemeV1,
         darkTheme: darkCodeTheme,
+      },
+      algolia: {
+        // The application ID provided by Algolia
+        appId: "2S5BU2AFKU",
+
+        // Public API key: it is safe to commit it
+        apiKey: "95093d62c703f2a4672f978c7d3c8e4f",
+
+        indexName: "xatom-js",
+
+        // Optional: see doc section below
+        contextualSearch: true,
+
+        // Optional: Specify domains where the navigation should occur through window.location instead on history.push. Useful when our Algolia config crawls multiple documentation sites and we want to navigate with window.location.href to them.
+        //  externalUrlRegex: "external\\.com|domain\\.com",
+
+        // Optional: Replace parts of the item URLs from Algolia. Useful when using the same search index for multiple deployments using a different baseUrl. You can use regexp or string in the `from` param. For example: localhost:3000 vs myCompany.com/docs
+        // replaceSearchResultPathname: {
+        //   from: "/guide/", // or as RegExp: /\/docs\//
+        //   to: "/",
+        // },
+
+        // Optional: Algolia search parameters
+        searchParameters: {},
+
+        // Optional: path for search page that enabled by default (`false` to disable it)
+        searchPagePath: "search",
+
+        //... other Algolia params
       },
     }),
 };

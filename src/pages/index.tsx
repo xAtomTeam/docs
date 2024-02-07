@@ -19,7 +19,7 @@ function HomepageHeader() {
         <div className={styles.buttons}>
           <Link
             className="button button--secondary button--lg"
-            to="/guide/Installation"
+            to="/guide/Installation/"
           >
             Getting Started 🚀
           </Link>
@@ -33,8 +33,8 @@ export default function Home(): JSX.Element {
   const { siteConfig } = useDocusaurusContext();
   return (
     <Layout
-      title={`${siteConfig.title}`}
-      description="Supercharge Your Webflow Creations into Dynamic Web Apps"
+      title={`Custom code framework for webflow`}
+      description="Supercharge Your Webflow Creations into Dynamic Web Apps with xAtom framework"
     >
       <HomepageHeader />
       <main>

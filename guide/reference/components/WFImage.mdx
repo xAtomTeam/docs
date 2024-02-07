@@ -1,0 +1,299 @@
+# WFImage 🆕
+
+```mdx-code-block
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+```
+
+The `WFImage` class allows you to manage image properties, including responsive image sets, and listen for when an image has been loaded.
+
+## Getting Started
+
+**Initialization**: To begin using the `WFImage` class in your xAtom project, you'll first need to install the `@xatom/image` package. After installation, you can initialize `WFImage` following the example below:
+
+### Installing the package
+
+<Tabs>
+<TabItem value="npm" label="npm" default>
+
+```bash title="Terminal"
+npm install @xatom/image
+```
+
+</TabItem>
+<TabItem value="yarn" label="yarn">
+
+```bash title="Terminal"
+yarn add @xatom/image
+```
+
+</TabItem>
+<TabItem value="pnpm" label="pnpm">
+
+```bash title="Terminal"
+pnpm add @xatom/image
+```
+
+</TabItem>
+</Tabs>
+
+```typescript title="Example"
+import { WFImage } from "@xatom/image";
+import { onReady } from "@xatom/core";
+
+// Wait until the webflow page has been loaded
+onReady(() => {
+  // Initialize WFImage
+  const img = new WFImage(".img");
+
+  // Listen for when the image has been loaded
+  img.onLoad(() => {
+    console.log("Image is loaded");
+  });
+
+  // Set the image source
+  img.setImage("https://picsum.photos/id/237/200/300");
+
+  // Initialize another WFImage
+  const anotherImg = new WFImage(".other-img");
+
+  // Listen for when the image has been loaded
+  anotherImg.onLoad(() => {
+    console.log("Image is loaded");
+  });
+
+  // Advance image source configuration
+  anotherImg.setImage({
+    src: "https://picsum.photos/id/237/800/800",
+    loading: "lazy",
+    sizes: "(max-width: 642px) 100vw, 642px",
+    srcSet: [
+      {
+        size: "500w",
+        url: "https://picsum.photos/id/237/500/500",
+      },
+      {
+        size: "642w",
+        url: "https://picsum.photos/id/237/800/800",
+      },
+    ],
+  });
+});
+```
+
+This example demonstrates how to use `WFImage` in xAtom. It shows how to add or update image sources, listen for when an image has been loaded, and set the image loading mode.
+
+
+**Syntax**
+
+```typescript
+new WFImage(selector);
+```
+
+> #### Note
+>
+> **Compatibility with `WFComponent`**
+>
+> The `WFImage` seamlessly extends the capabilities of the `WFComponent` class. This means that all the properties and methods available in `WFComponent` are fully compatible and can be used with `WFImage`. This compatibility provides you with a wide range of options for enhancing and customizing the behavior of your image element. Feel free to leverage the power of both components to achieve your desired results efficiently.
+
+
+## Methods
+
+The `WFImage` class provides a range of properties and methods to facilitate your development process:
+
+
+### `setImage(config)` {#set-image}
+
+The `setImage()` method in the `WFImage` class allows you to manage the image source, loading behavior, and source sets.
+
+```typescript title="Example"
+// Initialize a WFImage instance with the specified selector
+const img = new WFImage(".img");
+
+// Set the image URL
+img.setImage("https://picsum.photos/id/237/200/300");
+
+// Or set the image source along with source set
+img.setImage({
+  src: "https://picsum.photos/id/237/800/800",
+  sizes: "(max-width: 642px) 100vw, 642px",
+  srcSet: [
+    {
+      size: "500w",
+      url: "https://picsum.photos/id/237/500/500",
+    },
+    {
+      size: "642w",
+      url: "https://picsum.photos/id/237/800/800",
+    },
+  ],
+});
+```
+
+**Syntax**
+
+```typescript
+setImage(config: string | imgConfig): void;
+```
+
+#### Parameters {#set-config-parameter}
+
+| Name    | Type     | Description                           |
+| ------- | -------- | ------------------------------------- |
+| `config`   | `string` or `imgConfig`  | The configuration to set.          |
+
+`imgConfig` object type
+
+| Name    | Type     | Description                           |
+| ------- | -------- | ------------------------------------- |
+| `src`   | `string`  | The image source to set.          |
+| `loading?`   | `"eager"` or `"lazy"`  | The loading behavior to set.          |
+| `sizes?`   | `string`  | The responsive image sizes to set.          |
+| `srcSet?`   | `{url: string, size: string}[]`  | The responsive image sources to set.          |
+---
+
+### `getImageConfig()` {#get-image-config}
+
+The `getImageConfig()` method in the `WFImage` class allows you to retrieve the image configuration if set programmatically.
+
+```typescript title="Example"
+// Initialize a WFImage instance with the specified selector
+const img = new WFImage(".img");
+
+// Set the image URL
+img.setImage("https://picsum.photos/id/237/200/300");
+
+console.log(img.getImageConfig()); // Output: https://picsum.photos/id/237/200/300
+```
+
+**Syntax**
+
+```typescript
+getImageConfig(): string | imgConfig;
+```
+---
+
+### `getSrc()` {#get-src}
+
+The `getSrc()` method in the `WFImage` class allows you to retrieve the image source.
+
+```typescript title="Example"
+// Initialize a WFImage instance with the specified selector
+const img = new WFImage(".img");
+console.log(img.getSrc()); // Output: https://picsum.photos/id/237/200/300
+```
+
+**Syntax**
+
+```typescript
+getSrc(): string;
+```
+---
+
+### `getSizes()` {#get-sizes}
+
+The `getSizes()` method in the `WFImage` class allows you to retrieve the image media condition set on the `sizes` attribute.
+
+```typescript title="Example"
+// Initialize a WFImage instance with the specified selector
+const img = new WFImage(".img");
+console.log(img.getSizes()); // Output: (max-width: 642px) 100vw, 642px
+```
+
+**Syntax**
+
+```typescript
+getSizes(): string;
+```
+---
+
+### `getSrcSet()` {#get-src-set}
+
+The `getSrcSet()` method in the `WFImage` class allows you to retrieve the set of images configured for the image.
+
+```typescript title="Example"
+// Initialize a WFImage instance with the specified selector
+const img = new WFImage(".img");
+console.log(img.getSrcSet()); // Output: https://picsum.photos/id/237/500/500 500w, https://picsum.photos/id/237/800/800 642w
+```
+
+**Syntax**
+
+```typescript
+getSrcSet(): string;
+```
+---
+
+### `getLoading()` {#get-loading}
+
+The `getLoading()` method in the `WFImage` class allows you to retrieve the value of the `loading` attribute set for the image.
+
+```typescript title="Example"
+// Initialize a WFImage instance with the specified selector
+const img = new WFImage(".img");
+console.log(img.getLoading()); // Output: lazy
+```
+
+**Syntax**
+
+```typescript
+getLoading(): "lazy" | "eager";
+```
+---
+### `onLoad(cb)` {#on-load}
+
+The `onLoad()` method in the `WFImage` class allows you to register a callback function to be executed when an image loads successfully.
+
+```typescript title="Example"
+// Initialize a WFImage instance with the specified selector
+const img = new WFImage(".img");
+
+img.onLoad(() => {
+  console.log("Image loaded successfully");
+});
+
+// Set the image source
+img.setImage("https://picsum.photos/id/237/200/300");
+```
+
+**Syntax**
+
+```typescript
+onLoad(cb: (event: Event) => void): void;
+```
+
+#### Parameters {#on-load-parameter}
+
+| Name   | Type                    | Description                                      |
+| ------ | ----------------------- | ------------------------------------------------ |
+| `cb`   | `function(event: Event)` | The callback function to execute on image load. |
+
+---
+### `onLoadError(cb)` {#on-load}
+
+The `onLoadError()` method in the `WFImage` class allows you to register a callback function to be executed when an image fails to load successfully.
+
+```typescript title="Example"
+// Initialize a WFImage instance with the specified selector
+const img = new WFImage(".img");
+
+img.onLoadError(() => {
+  console.log("Image failed to load");
+  // Retry logic can be implemented here
+});
+
+// Set the image source
+img.setImage("https://picsum.photos/id/237/200/300");
+```
+
+**Syntax**
+
+```typescript
+onLoadError(cb: (event: Event) => void): void;
+```
+
+#### Parameters {#on-load-parameter}
+
+| Name   | Type                    | Description                                      |
+| ------ | ----------------------- | ------------------------------------------------ |
+| `cb`   | `function(event: Event)` | The callback function to execute when an image fails to load. |
