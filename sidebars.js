@@ -42,6 +42,7 @@ const sidebars = {
             "reference/components/WFFormComponent",
             "reference/components/WFInvisibleForm",
             "reference/components/WFImage",
+            "reference/components/WFNav",
           ],
         },
         {

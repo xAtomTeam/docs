@@ -1,0 +1,367 @@
+# WFNav 🆕
+
+```mdx-code-block
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+```
+
+The `WFNav` class empowers you to manage Webflow's Navbar element programmatically, providing functionalities such as opening, closing, and toggling the menu drawer with ease.
+
+## Getting Started
+
+**Initialization**: To start using the `WFNav` class in your xAtom project, you'll need to install the `@xatom/nav` package first. After installation, follow the example below to initialize `WFNav`:
+
+### Installing the package
+
+<Tabs>
+<TabItem value="npm" label="npm" default>
+
+```bash title="Terminal"
+npm install @xatom/nav
+```
+
+</TabItem>
+<TabItem value="yarn" label="yarn">
+
+```bash title="Terminal"
+yarn add @xatom/nav
+```
+
+</TabItem>
+<TabItem value="pnpm" label="pnpm">
+
+```bash title="Terminal"
+pnpm add @xatom/nav
+```
+
+</TabItem>
+</Tabs>
+
+```typescript title="Example"
+import { WFNav } from "@xatom/nav";
+import { onReady, WFComponent } from "@xatom/core";
+
+// Wait until the webflow page has loaded
+onReady(() => {
+  // Initialize WFNav
+  const nav = new WFNav(".w-nav");
+
+  // Initialize WFComponent for the button on the page
+  const button = new WFComponent(".button-on-page");
+
+  // Listen to the state of the nav menu
+  nav.onNavStateChange((isOpen) => {
+    console.log("Is navbar opened:", isOpen);
+  });
+
+  // On button click, toggle nav menu
+  button.on("click", () => {
+    nav.toggle();
+  });
+});
+```
+
+This example demonstrates how to use `WFNav` in xAtom. It shows how to toggle the nav menu drawer and listen to its state.
+
+**Syntax**
+
+```typescript
+new WFNav(selector);
+```
+
+:::caution
+
+Ensure that you open, close, or toggle the menu drawer only when the menu icon is visible. Navbar behavior can be unpredictable on desktop if trigger breakpoints are not properly set for navbar.
+
+:::
+
+> #### Note
+>
+> **Compatibility with `WFComponent`**
+>
+> The `WFNav` seamlessly extends the capabilities of the `WFComponent` class. This means that all the properties and methods available in `WFComponent` are fully compatible and can be used with `WFNav`. This compatibility provides you with a wide range of options for enhancing and customizing the behavior of your nav element. Feel free to leverage the power of both components to achieve your desired results efficiently.
+
+
+## Methods
+
+The `WFNav` class offers a range of properties and methods to streamline your development process:
+
+
+### `open()` {#open}
+
+The `open()` method in the `WFNav` class enables you to open the menu drawer.
+
+```typescript title="Example"
+// Initialize WFNav
+const nav = new WFNav(".w-nav");
+
+// Initialize WFComponent for the button on the page
+const button = new WFComponent(".button-on-page");
+
+// On button click, open nav menu
+button.on("click", () => {
+  nav.open();
+});
+```
+
+**Syntax**
+
+```typescript
+open(): void;
+```
+---
+
+### `close()` {#close}
+
+The `close()` method in the `WFNav` class allows you to close the menu drawer.
+
+```typescript title="Example"
+// Initialize WFNav
+const nav = new WFNav(".w-nav");
+
+// Initialize WFComponent for the button on the page
+const button = new WFComponent(".button-on-page");
+
+// On button click, close nav menu
+button.on("click", () => {
+  nav.close();
+});
+```
+
+**Syntax**
+
+```typescript
+close(): void;
+```
+
+---
+
+### `toggle()` {#toggle}
+
+The `toggle()` method in the `WFNav` class allows you to toggle the menu drawer.
+
+```typescript title="Example"
+// Initialize WFNav
+const nav = new WFNav(".w-nav");
+
+// Initialize WFComponent for the button on the page
+const button = new WFComponent(".button-on-page");
+
+// On button click, toggle nav menu
+button.on("click", () => {
+  nav.toggle();
+});
+```
+
+**Syntax**
+
+```typescript
+toggle(): void;
+```
+
+---
+
+### `isOpen()` {#is-open}
+
+The `isOpen()` method in the `WFNav` class allows you to check if the menu drawer is open.
+
+```typescript title="Example"
+// Initialize WFNav
+const nav = new WFNav(".w-nav");
+
+// Initialize WFComponent for the button on the page
+const button = new WFComponent(".button-on-page");
+
+// On button click, toggle nav menu
+button.on("click", () => {
+  nav.toggle();
+  console.log("Is menu opened:", nav.isOpen()); // Output: true or false
+});
+```
+
+**Syntax**
+
+```typescript
+isOpen(): boolean;
+```
+---
+
+### `getButtons()` {#get-buttons}
+
+The `getButtons()` method in the `WFNav` class returns an array of menu icon buttons.
+
+```typescript title="Example"
+// Initialize WFNav
+const nav = new WFNav(".w-nav");
+
+// Get the array of menu icon buttons
+const menuIcons = nav.getButtons();
+
+// Log the array of menu icon buttons
+console.log(menuIcons); // Output: [WFComponent]
+
+// Add an event listener to the first menu icon button
+menuIcons[0].on("click",()=>{
+  console.log("button is clicked");
+})
+```
+
+**Syntax**
+
+```typescript
+getButtons(): WFComponent[];
+```
+---
+
+### `getMenu()` {#get-menu}
+
+The `getMenu()` method in the `WFNav` class returns the menu container.
+
+```typescript title="Example"
+// Initialize WFNav
+const nav = new WFNav(".w-nav");
+
+// Get the menu container
+const menuContainer = nav.getMenu();
+
+// Log the menu container
+console.log(menuContainer); // Output: WFComponent
+
+// Set style for the menu container
+menuContainer.setStyle({
+  backgroundColor:"#444",
+})
+```
+
+**Syntax**
+
+```typescript
+getMenu(): WFComponent;
+```
+---
+
+### `getLinks()` {#get-links}
+
+The `getLinks()` method in the `WFNav` class returns an array of link components present in the menu.
+
+```typescript title="Example"
+// Initialize WFNav
+const nav = new WFNav(".w-nav");
+
+// Get all the links
+const links = nav.getLinks();
+
+// Log the links
+console.log(links); // Output: [WFComponent]
+```
+
+**Syntax**
+
+```typescript
+getLinks(): WFComponent[];
+```
+---
+
+### `getLinks()` {#get-links}
+
+The `getLinks()` method in the `WFNav` class returns an array of link components present in the menu.
+
+```typescript title="Example"
+// Initialize WFNav
+const nav = new WFNav(".w-nav");
+
+// Get all the links
+const links = nav.getLinks();
+
+// Log the links
+console.log(links); // Output: [WFComponent]
+```
+
+**Syntax**
+
+```typescript
+getLinks(): WFComponent[];
+```
+---
+
+### `getOverlay()` {#get-overlay}
+
+The `getOverlay()` method in the `WFNav` class returns the overlay container.
+
+```typescript title="Example"
+// Initialize WFNav
+const nav = new WFNav(".w-nav");
+
+// Get the overlay container
+const overlayContainer = nav.getOverlay();
+
+// Log the overlay container
+console.log(overlayContainer); // Output: WFComponent
+
+// Apply styles to the overlay container
+overlayContainer.setStyle({
+  backdropFilter: "blur(20px)"
+});
+```
+
+**Syntax**
+
+```typescript
+getOverlay(): WFComponent;
+```
+
+---
+
+### `getConfig()` {#get-config}
+
+The `getConfig()` method in the `WFNav` class returns the configuration object that defines the behavior of the navbar set by Webflow.
+
+```typescript title="Example"
+// Initialize WFNav
+const nav = new WFNav(".w-nav");
+
+// Get the navbar configuration
+const config = nav.getConfig();
+/**
+config is a configuration object
+{
+    "animation": "default",
+    "animOver": false,
+    "animDirect": 1,
+    "easing": "ease",
+    "easing2": "ease",
+    "duration": 200
+}
+*/
+
+// Modify the configuration (example: changing the animation duration)
+config.duration = 1000; // Setting animation duration to 1 second
+```
+
+**Syntax**
+
+```typescript
+getConfig(): Object;
+```
+
+---
+
+### `getWebflowObject()` {#get-config}
+
+The `getWebflowObject()` method in the `WFNav` class returns the `.wNav` jQuery object set by Webflow.
+
+```typescript title="Example"
+// Initialize WFNav
+const nav = new WFNav(".w-nav");
+
+// Get the Webflow object for the navbar
+const wNavConfig = nav.getWebflowObject();
+
+console.log(wNavConfig); // Output: wNav object
+```
+
+**Syntax**
+
+```typescript
+getWebflowObject(): Object;
+```
