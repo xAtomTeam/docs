@@ -1,0 +1,467 @@
+# WFSlider 🆕
+
+```mdx-code-block
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+```
+
+The `WFSlider` class provides functionality to control Webflow's native slider, enabling tasks such as adding or removing slides and navigating the slides programmatically.
+
+## Getting Started
+
+**Initialization**: To start using the `WFSlider` class in your xAtom project, you'll need to install the `@xatom/slider` package. After installation, initialize `WFSlider` as shown in the example below:
+
+### Installing the package
+
+<Tabs>
+<TabItem value="npm" label="npm" default>
+
+```bash title="Terminal"
+npm install @xatom/slider
+```
+
+</TabItem>
+<TabItem value="yarn" label="yarn">
+
+```bash title="Terminal"
+yarn add @xatom/slider
+```
+
+</TabItem>
+<TabItem value="pnpm" label="pnpm">
+
+```bash title="Terminal"
+pnpm add @xatom/slider
+```
+
+</TabItem>
+</Tabs>
+
+```typescript title="Example"
+import { WFSlider } from "@xatom/slider";
+import { onReady, WFComponent } from "@xatom/core";
+
+// Wait until the webflow page has loaded
+onReady(() => {
+  // Initialize WFSlider
+  const slider = new WFSlider(".slider");
+  const myButton = new WFSlider(".my-button");
+  const cmsItem = new WFComponent(".item");
+
+  // Add a slide to the slider
+  slider.addSlide(cmsItem);
+
+  // Remove the first slide from the slider
+  slider.removeSlide(0);
+
+  // Handle button click to navigate to the next slide
+  myButton.on("click", () => {
+    slider.goNext();
+  });
+  
+  // Listen for slide change events
+  slider.onSlideChange((activeIndex, prevIndex) => {
+    console.log(activeIndex, prevIndex);
+  });
+
+  // Configure the slider for infinite scrolling
+  slider.getConfig().config.infinite = true;
+});
+```
+
+This example showcases the integration of `WFSlider` into an xAtom project, featuring slide manipulation and navigation through programmatic control.
+
+**Syntax**
+
+```typescript
+new WFSlider(selector);
+```
+
+> #### Note
+>
+> **Compatibility with `WFComponent`**
+>
+> The `WFSlider` seamlessly extends the capabilities of the `WFComponent` class. This means that all the properties and methods available in `WFComponent` are fully compatible and can be used with `WFSlider`. This compatibility provides you with a wide range of options for enhancing and customizing the behavior of your slider element. Feel free to leverage the power of both components to achieve your desired results efficiently.
+
+
+## Methods
+
+The `WFSlider` class offers a variety of properties and methods to streamline your development workflow:
+
+
+### `addSlide(el, config)` {#add-slide}
+
+The `addSlide()` method in the `WFSlider` class allows you to add a new slide to the slider.
+
+```typescript title="Example"
+// Initialize WFSlider
+const slider = new WFSlider(".slider");
+
+// Initialize WFComponent for each slide
+const item1 = new WFSlider(".item1");
+const item2 = new WFSlider(".item2");
+const item3 = new WFSlider(".item3");
+
+// Add the first slide to the slider
+slider.addSlide(item1);
+
+// Add the second slide to the slider at index 2
+slider.addSlide(item2, { index: 2 });
+
+// Add the third slide to the slider with a custom CSS class
+slider.addSlide(item3, { cssClass: "custom-slide-class" });
+```
+
+**Syntax**
+
+```typescript
+addSlide(el: WFComponent, config?: { index?: number; cssClass?: string }): void;
+```
+
+#### Parameters {#add-slide-parameter}
+
+| Name      | Type          | Description                                |
+| --------- | ------------- | ------------------------------------------ |
+| `el`      | `WFComponent` | The component to add as a slide.           |
+| `config`  | `{}`          | Additional configuration for the slide.    |
+| `index?`   | `number`      | The index at which the slide should be inserted. |
+| `cssClass?`| `string`      | CSS class to be appended to the slide container. |
+
+---
+
+### `removeSlide(index)` {#remove-slide}
+
+The `removeSlide()` method in the `WFSlider` class enables you to remove a slide from the slider.
+
+```typescript title="Example"
+// Initialize WFSlider
+const slider = new WFSlider(".slider");
+
+// Initialize WFComponent for each slide
+const item1 = new WFSlider(".item1");
+
+// Add the first slide to the slider at index 1
+slider.addSlide(item1, { index: 1 });
+
+// Remove the slide at index 1 from the slider
+slider.removeSlide(1);
+```
+
+**Syntax**
+
+```typescript
+removeSlide(index: number): void;
+```
+
+#### Parameters {#remove-slide-parameter}
+
+| Name      | Type          | Description                                |
+| --------- | ------------- | ------------------------------------------ |
+| `index`   | `number`      | The index of the slide to be removed.      |
+---
+
+### `goNext()` {#go-next-slide}
+
+The `goNext()` method in the `WFSlider` class allows you to programmatically navigate to the next slide.
+
+```typescript title="Example"
+// Initialize WFSlider
+const slider = new WFSlider(".slider");
+const myButton = new WFSlider(".my-button");
+
+// On button click, go to the next slide
+myButton.on("click", () => {
+    slider.goNext();
+});
+```
+
+**Syntax**
+
+```typescript
+goNext(): void;
+```
+---
+
+### `goPrevious()` {#go-previous-slide}
+
+The `goPrevious()` method in the `WFSlider` class allows you to programmatically navigate to the previous slide.
+
+```typescript title="Example"
+// Initialize WFSlider
+const slider = new WFSlider(".slider");
+const prevButton = new WFSlider(".prev-button");
+
+// On button click, go to the previous slide
+prevButton.on("click", () => {
+    slider.goPrevious();
+});
+```
+
+**Syntax**
+
+```typescript
+goPrevious(): void;
+```
+---
+
+### `goToIndex(index)` {#go-to-index}
+
+The `goToIndex()` method in the `WFSlider` class allows you to programmatically navigate to a specific slide by its index.
+
+```typescript title="Example"
+// Initialize WFSlider
+const slider = new WFSlider(".slider");
+const navButtons = document.querySelectorAll(".nav-button");
+
+// On nav button click, go to the corresponding slide
+navButtons.forEach((button, index) => {
+    button.addEventListener("click", () => {
+        slider.goToIndex(index);
+    });
+});
+```
+
+**Syntax**
+
+```typescript
+goToIndex(index: number): void;
+```
+
+#### Parameters {#go-to-index-parameter}
+
+| Name      | Type     | Description                                  |
+| --------- | -------- | -------------------------------------------- |
+| `index`   | `number` | The index of the slide to navigate to.       |
+---
+
+### `getActiveSlide()` {#active-slide}
+
+The `getActiveSlide()` method in the `WFSlider` class returns the active slide component.
+
+```typescript title="Example"
+// Initialize WFSlider
+const slider = new WFSlider(".slider");
+const prevButton = new WFSlider(".prev-button");
+
+// On button click
+prevButton.on("click", () => {
+  //Getting current slide
+  const activeSlide = slider.getActiveSlide();
+  //Updating style
+  activeSlide.setStyle({
+    background: "#ccc"
+  });
+});
+```
+
+**Syntax**
+
+```typescript
+getActiveSlide(): WFComponent;
+```
+---
+
+### `getAllSlides()` {#all-slides}
+
+The `getAllSlides()` method in the `WFSlider` class retrieves an array containing all slide components.
+
+```typescript title="Example"
+// Initialize WFSlider
+const slider = new WFSlider(".slider");
+
+// Get all slides
+const allSlides = slider.getAllSlides();
+
+// Log all slide components
+console.log(allSlides);
+```
+
+**Syntax**
+
+```typescript
+getAllSlides(): WFComponent[];
+```
+---
+
+### `getSlideByIndex(index)` {#slide-by-index}
+
+The `getSlideByIndex()` method in the `WFSlider` class retrieves a slide component by its index.
+
+```typescript title="Example"
+// Initialize WFSlider
+const slider = new WFSlider(".slider");
+
+// Get the slide at index 2
+const slideAtIndex2 = slider.getSlideByIndex(2);
+
+// Log the slide component
+console.log(slideAtIndex2);
+```
+
+**Syntax**
+
+```typescript
+getSlideByIndex(index: number): WFComponent;
+```
+---
+
+### `getActiveSlideIndex()` {#active-slide-index}
+
+The `getActiveSlideIndex()` method in the `WFSlider` class returns the index of the currently active slide.
+
+```typescript title="Example"
+// Initialize WFSlider
+const slider = new WFSlider(".slider");
+
+// Log the active slide index
+console.log("Active slide index:", activeSlideIndex.getActiveSlideIndex()); //1
+
+slider.goNextSlide();
+
+console.log("Active slide index:", activeSlideIndex.getActiveSlideIndex()); //2
+
+```
+
+**Syntax**
+
+```typescript
+getActiveSlideIndex(): number;
+```
+---
+
+### `getPreviousSlideIndex()` {#previous-slide-index}
+
+The `getPreviousSlideIndex()` method in the `WFSlider` class returns the index of the previously active slide.
+
+```typescript title="Example"
+// Initialize WFSlider
+const slider = new WFSlider(".slider");
+
+// Log the previous slide index
+console.log("Previous slide index:", slider.getPreviousSlideIndex()); //0
+
+slider.goPrevious();
+
+console.log("Previous slide index:", slider.getPreviousSlideIndex()); //3
+```
+
+**Syntax**
+
+```typescript
+getPreviousSlideIndex(): number;
+```
+---
+
+### `onSlideChange(cb)` {#slide-change-event}
+
+The `onSlideChange` method in the `WFSlider` class allows you to register a callback function to be executed when the active slide changes.
+
+```typescript title="Example"
+// Initialize WFSlider
+const slider = new WFSlider(".slider");
+
+// Define the callback function
+const slideChangeCallback = (activeIndex:number, prevIndex:number) => {
+  console.log(`Slide changed from ${prevIndex} to ${activeIndex}`);
+};
+
+// Register the callback function
+const unregisterCallback = slider.onSlideChange(slideChangeCallback);
+
+// To unregister the callback function later
+// unregisterCallback();
+```
+
+**Syntax**
+
+```typescript
+onSlideChange(cb: (activeIndex: number, prevIndex: number) => void): () => void;
+```
+
+#### Parameters {#slide-change-callback-parameters}
+
+| Name          | Type                                          | Description                                            |
+| ------------- | --------------------------------------------- | ------------------------------------------------------ |
+| `cb`          | `(activeIndex: number, prevIndex: number) => void` | The callback function to be executed on slide change. |
+
+#### Returns
+
+A function to unregister the callback when no longer needed.
+
+---
+
+### `getSlideNav()` {#slide-nav-component}
+
+The `getSlideNav()` method in the `WFSlider` class returns the navigation component associated with the slider.
+
+```typescript title="Example"
+// Initialize WFSlider
+const slider = new WFSlider(".slider");
+
+// Get the navigation component
+const navComponent = slider.getSlideNav();
+
+// Modify the navigation component
+navComponent.setStyle({
+  backgroundColor: "#000",
+  color: "#fff",
+});
+```
+
+**Syntax**
+
+```typescript
+getSlideNav(): WFComponent<HTMLElement>;
+```
+---
+
+### `setSlideNavigationState(state: boolean)` {#set-slide-navigation-state}
+
+The `setSlideNavigationState()` method in the `WFSlider` class enables or disables the navigation capabilities of the slider.
+
+```typescript title="Example"
+// Initialize WFSlider
+const slider = new WFSlider(".slider");
+
+// Disable slider navigation
+slider.setSlideNavigationState(false);
+
+// Enable slider navigation
+slider.setSlideNavigationState(true);
+```
+
+**Syntax**
+
+```typescript
+setSlideNavigationState(state: boolean): void;
+```
+---
+
+
+#### Parameters {#set-slide-navigation-parameter}
+
+| Name      | Type      | Description                            |
+| --------- | --------- | -------------------------------------- |
+| `state`   | `boolean` | `true` to enable navigation, `false` to disable it. |
+
+---
+
+### `getConfig()` {#get-config}
+
+The `getConfig()` method in the `WFSlider` class returns the configuration object set by Webflow for the slider.
+
+```typescript title="Example"
+// Initialize WFSlider
+const slider = new WFSlider(".slider");
+
+// Get the configuration object
+const config = slider.getConfig();
+
+console.log(config); // Output: Webflow slider configuration object
+```
+
+**Syntax**
+
+```typescript
+getConfig(): object;
+```
