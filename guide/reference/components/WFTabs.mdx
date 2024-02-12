@@ -1,0 +1,412 @@
+# WFTabs 🆕
+
+```mdx-code-block
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+```
+
+The `WFTabs` class offers functionality to manage Webflow's built-in tabs, facilitating tasks like adding or removing tabs and navigating between them programmatically.
+
+## Getting Started
+
+**Initialization**: To begin using the `WFTabs` class in your xAtom project, you'll first need to install the `@xatom/tabs` package. After installation, initialize `WFTabs` as demonstrated in the example below:
+### Installing the package
+
+<Tabs>
+<TabItem value="npm" label="npm" default>
+
+```bash title="Terminal"
+npm install @xatom/slider
+```
+
+</TabItem>
+<TabItem value="yarn" label="yarn">
+
+```bash title="Terminal"
+yarn add @xatom/slider
+```
+
+</TabItem>
+<TabItem value="pnpm" label="pnpm">
+
+```bash title="Terminal"
+pnpm add @xatom/slider
+```
+
+</TabItem>
+</Tabs>
+
+```typescript title="Example"
+import { WFTabs } from "@xatom/tabs";
+import { onReady, WFComponent } from "@xatom/core";
+
+// Wait until the webflow page has loaded
+onReady(() => {
+  // Initialize WFTabs
+  const tabs = new WFTabs(".tabs");
+  const myButton = new WFComponent(".my-button");
+  // Initialize WFComponent for the menu item
+  const menuItem = new WFComponent(".menu-item");
+
+  // Initialize WFComponent for the panel item
+  const panelItem = new WFComponent(".panel-item");
+
+  // Add a new tab
+  tabs.addTab({
+    menuItem: menuItem,
+    panelItem: panelItem,
+    index: 0,
+  });
+
+  // Handle button click to navigate to the tab by index
+  myButton.on("click", () => {
+    tabs.goToTabByIndex(2);
+  });
+
+  // Listen for tabs change events
+  tabs.onTabChange((index) => {
+    console.log(index);
+  });
+});
+```
+
+This example demonstrates the integration of `WFTabs` into an xAtom project, showcasing slide manipulation and navigation through programmatic control.
+
+**Syntax**
+
+```typescript
+new WFTabs(selector);
+```
+
+> #### Note
+>
+> **Compatibility with `WFComponent`**
+>
+> The `WFTabs` seamlessly extends the capabilities of the `WFComponent` class. This means that all the properties and methods available in `WFComponent` are fully compatible and can be used with `WFTabs`. This compatibility provides you with a wide range of options for enhancing and customizing the behavior of your tabs element. Feel free to leverage the power of both components to achieve your desired results efficiently.
+
+
+## Methods
+
+The `WFTabs` class provides a range of properties and methods to facilitate your development process:
+
+### `addTab(data)` {#add-tab}
+
+The `addTab()` method in the `WFTabs` class allows you to add a new tab.
+
+```typescript title="Example"
+// Initialize WFTabs
+const tabs = new WFTabs(".tabs");
+
+// Initialize WFComponent for the menu item
+const menuItem = new WFComponent(".menu-item");
+
+// Initialize WFComponent for the panel item
+const panelItem = new WFComponent(".panel-item");
+
+// Add a new tab
+tabs.addTab({
+    menuItem: menuItem,
+    panelItem: panelItem,
+});
+```
+
+**Syntax**
+
+```typescript
+addTab(data: { menuItem: WFComponent, menuItemClass?: string, panelItem: WFComponent, panelItemClass?: string, index?: number }): void;
+```
+
+#### Parameters {#add-tab-parameter}
+
+| Name             | Type              | Description                                    |
+| ---------------- | ----------------- | ---------------------------------------------- |
+| `data`           | `{}`              | Data object containing information about the tab. |
+| `data.menuItem`  | `WFComponent`     | Menu item component to be added as a tab.      |
+| `data.menuItemClass` | `string`       | CSS class for the menu item.                   |
+| `data.panelItem` | `WFComponent`     | Panel item component to be added as a tab.     |
+| `data.panelItemClass` | `string`       | CSS class for the panel item.                  |
+| `data.index`     | `number`          | Index at which the tab should be added.        |
+
+---
+
+### `removeTab(index)` {#remove-tab}
+
+The `removeTab()` method in the `WFTabs` class allows you to remove a tab at the specified index.
+
+```typescript title="Example"
+// Initialize WFTabs
+const tabs = new WFTabs(".tabs");
+
+// Remove the tab at index 2
+tabs.removeTab(2);
+```
+
+**Syntax**
+
+```typescript
+removeTab(index: number): void;
+```
+
+#### Parameters {#remove-tab-parameter}
+
+| Name      | Type     | Description                           |
+| --------- | -------- | ------------------------------------- |
+| `index`   | `number` | The index of the tab to be removed.   |
+
+---
+
+### `goToTabByIndex(index)` {#go-to-tab-by-index}
+
+The `goToTabByIndex()` method in the `WFTabs` class allows you to programmatically switch to a tab by its index.
+
+```typescript title="Example"
+// Initialize WFTabs
+const tabs = new WFTabs(".tabs");
+
+// Go to the tab at index 3
+tabs.goToTabByIndex(3);
+```
+
+**Syntax**
+
+```typescript
+goToTabByIndex(index: number): void;
+```
+
+#### Parameters {#go-to-tab-by-index-parameter}
+
+| Name      | Type     | Description                           |
+| --------- | -------- | ------------------------------------- |
+| `index`   | `number` | The index of the tab to navigate to.  |
+
+---
+
+### `goToNextTab(infinite?)` {#go-to-next-tab}
+
+The `goToNextTab()` method in the `WFTabs` class allows you to programmatically switch to the next tab.
+
+```typescript title="Example"
+// Initialize WFTabs
+const tabs = new WFTabs(".tabs");
+
+// Go to the next tab
+tabs.goToNextTab();
+```
+
+**Syntax**
+
+```typescript
+goToNextTab(infinite?: boolean): void;
+```
+
+#### Parameters {#go-to-next-tab-parameter}
+
+| Name       | Type      | Description                                    |
+| ---------- | --------- | ---------------------------------------------- |
+| `infinite` | `boolean` | Optional. Specifies whether the tabs are in an infinite loop. Default is `false`. |
+
+---
+
+### `goToPreviousTab(infinite?)` {#go-to-previous-tab}
+
+The `goToPreviousTab()` method in the `WFTabs` class allows you to programmatically switch to the previous tab.
+
+```typescript title="Example"
+// Initialize WFTabs
+const tabs = new WFTabs(".tabs");
+
+// Go to the previous tab
+tabs.goToPreviousTab();
+```
+
+**Syntax**
+
+```typescript
+goToPreviousTab(infinite?: boolean): void;
+```
+
+#### Parameters {#go-to-previous-tab-parameter}
+
+| Name       | Type      | Description                                    |
+| ---------- | --------- | ---------------------------------------------- |
+| `infinite` | `boolean` | Optional. Specifies whether the tabs are in an infinite loop. Default is `false`. |
+
+---
+
+### `getAllTab()` {#get-all-tab}
+
+The `getAllTab()` method in the `WFTabs` class returns an object containing arrays of menu items and panel items.
+
+```typescript title="Example"
+// Initialize WFTabs
+const tabs = new WFTabs(".tabs");
+
+// Get all tabs
+const allTabs = tabs.getAllTab();
+
+console.log(allTabs.menuItems); // Array of menu items
+console.log(allTabs.panelItems); // Array of panel items
+```
+
+**Syntax**
+
+```typescript
+getAllTab(): { menuItems: WFComponent<HTMLAnchorElement>[]; panelItems: WFComponent<HTMLDivElement>[]; };
+```
+
+This method returns an object with two properties:
+- `menuItems`: An array of menu items (`WFComponent<HTMLAnchorElement>[]`).
+- `panelItems`: An array of panel items (`WFComponent<HTMLDivElement>[]`).
+
+---
+
+### `getActiveTabIndex()` {#get-active-tab-index}
+
+The `getActiveTabIndex()` method in the `WFTabs` class returns the index of the currently active tab.
+
+```typescript title="Example"
+// Initialize WFTabs
+const tabs = new WFTabs(".tabs");
+
+// Get the index of the active tab
+const activeTabIndex = tabs.getActiveTabIndex();
+
+console.log(activeTabIndex); // Output: Index of the active tab
+```
+
+**Syntax**
+
+```typescript
+getActiveTabIndex(): number;
+```
+
+This method returns a `number` representing the index of the currently active tab.
+
+---
+
+### `getActivePanel()` {#get-active-panel}
+
+The `getActivePanel()` method in the `WFTabs` class returns the currently active panel component.
+
+```typescript title="Example"
+// Initialize WFTabs
+const tabs = new WFTabs(".tabs");
+
+// Get the active panel component
+const activePanel = tabs.getActivePanel();
+
+console.log(activePanel); // Output: Currently active panel component
+```
+
+**Syntax**
+
+```typescript
+getActivePanel(): WFComponent<HTMLDivElement>;
+```
+
+---
+
+### `getActiveMenuItem()` {#get-active-menu-item}
+
+The `getActiveMenuItem()` method in the `WFTabs` class returns the currently active menu item component.
+
+```typescript title="Example"
+// Initialize WFTabs
+const tabs = new WFTabs(".tabs");
+
+// Get the active menu item component
+const activeMenuItem = tabs.getActiveMenuItem();
+
+console.log(activeMenuItem); // Output: Currently active menu item component
+```
+
+**Syntax**
+
+```typescript
+getActiveMenuItem(): WFComponent<HTMLAnchorElement>;
+```
+
+This method returns a `WFComponent<HTMLAnchorElement>` representing the currently active menu item component.
+
+---
+
+### `getMenuContainer()` {#get-menu-container}
+
+The `getMenuContainer()` method in the `WFTabs` class returns the container element holding the tab menu items.
+
+```typescript title="Example"
+// Initialize WFTabs
+const tabs = new WFTabs(".tabs");
+
+// Get the menu container element
+const menuContainer = tabs.getMenuContainer();
+
+console.log(menuContainer); // Output: Container element holding tab menu items
+```
+
+**Syntax**
+
+```typescript
+getMenuContainer(): WFComponent<HTMLElement>;
+```
+
+This method returns a `WFComponent<HTMLElement>` representing the container element holding the tab menu items.
+
+---
+
+### `getContentContainer()` {#get-content-container}
+
+The `getContentContainer()` method in the `WFTabs` class returns the container element holding the tab content panels.
+
+```typescript title="Example"
+// Initialize WFTabs
+const tabs = new WFTabs(".tabs");
+
+// Get the content container element
+const contentContainer = tabs.getContentContainer();
+
+console.log(contentContainer); // Output: Container element holding tab content panels
+```
+
+**Syntax**
+
+```typescript
+getContentContainer(): WFComponent<HTMLElement>;
+```
+
+This method returns a `WFComponent<HTMLElement>` representing the container element holding the tab content panels.
+
+---
+
+### `onTabChange(cb)` {#on-tab-change}
+
+The `onTabChange()` method in the `WFTabs` class allows you to register a callback function that will be invoked whenever a tab change occurs.
+
+```typescript title="Example"
+// Initialize WFTabs
+const tabs = new WFTabs(".tabs");
+
+// Register a callback function for tab change
+const unregisterCallback = tabs.onTabChange((index) => {
+  console.log("Tab changed to index:", index);
+});
+
+// Unregister the callback function
+unregisterCallback();
+```
+
+**Syntax**
+
+```typescript
+onTabChange(cb: (index:number)=>void): () => void;
+```
+
+#### Parameters {#on-tab-change-parameter}
+
+| Name  | Type      | Description                                  |
+| ----- | --------- | -------------------------------------------- |
+| `cb`  | `(index:number)=>void`  | The callback function for tab change events. |
+
+This method returns a function that can be used to unregister the callback.
+
+---

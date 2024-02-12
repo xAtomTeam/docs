@@ -44,6 +44,7 @@ const sidebars = {
             "reference/components/WFImage",
             "reference/components/WFNav",
             "reference/components/WFSlider",
+            "reference/components/WFTabs",
           ],
         },
         {
