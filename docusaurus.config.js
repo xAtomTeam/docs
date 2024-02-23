@@ -257,7 +257,7 @@ const config = {
               // },
               {
                 label: "Twitter",
-                href: "https://twitter.com/patel_virat",
+                href: "https://twitter.com/xAtomTeam",
               },
             ],
           },
@@ -275,7 +275,7 @@ const config = {
             ],
           },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} xAtom. Made with ❤️ by <a href="https://twitter.com/patel_virat" target="_blank">Virat Patel</a>`,
+        copyright: `Copyright © ${new Date().getFullYear()} xAtom. Made with ❤️`,
       },
       prism: {
         theme: lightCodeThemeV1,

@@ -83,7 +83,7 @@ const sidebars = {
 
           items: [
             "reference/services/RESTAPIClient",
-            "reference/services/GraphQLClient",
+            // "reference/services/GraphQLClient",
             // "reference/services/FireStoreClient",
             // "reference/services/SupabaseClient",
           ],
