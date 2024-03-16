@@ -143,8 +143,7 @@ const lightCodeThemeV1 = {
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: "xAtom",
-  tagline:
-    "Supercharge Your Webflow Creations into Dynamic Web Apps",
+  tagline: "JS framework for your Webflow project",
   favicon: "img/favicon.ico",
   trailingSlash: true,
   // Set the production url of your site here
@@ -224,6 +223,20 @@ const config = {
             position: "left",
             label: "Docs",
           },
+          {
+            label: "More Tools",
+            items: [
+              {
+                label: "xAttribute Webflow App",
+                href: "https://webflow.com/apps/detail/xattribute",
+              },
+              {
+                label: "xSync (Coming Soon)",
+                href: "#",
+              },
+            ],
+            position: "left",
+          },
           // { to: "/blog", label: "Blog", position: "left" },
           {
             href: "https://github.com/xAtomTeam/docs",
@@ -239,7 +252,7 @@ const config = {
             title: "Docs",
             items: [
               {
-                label: "Tutorial",
+                label: "See All Docs",
                 to: "/guide/Installation/",
               },
             ],
@@ -247,10 +260,6 @@ const config = {
           {
             title: "Community",
             items: [
-              {
-                label: "Stack Overflow",
-                href: "https://stackoverflow.com/questions/tagged/xatom",
-              },
               // {
               //   label: "Discord",
               //   href: "https://discordapp.com/invite/xatom",
@@ -275,7 +284,7 @@ const config = {
             ],
           },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} xAtom. Made with ❤️`,
+        copyright: `Copyright © ${new Date().getFullYear()} xAtom`,
       },
       prism: {
         theme: lightCodeThemeV1,

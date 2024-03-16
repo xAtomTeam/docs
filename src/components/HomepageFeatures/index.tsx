@@ -10,35 +10,26 @@ type FeatureItem = {
 
 const FeatureList: FeatureItem[] = [
   {
-    title: "Effortless Web App Development",
+    title: "Robust developer toolkit",
     src: require("@site/static/img/a.png").default,
     description: (
       <>
-        Streamline dynamic web app development, maximizing
-        Webflow's potential for a powerful yet user-friendly
-        experience.
+        With xAtom's reverse proxy enabled in dev mode, you can
+        view live changes on your localhost without pushing or
+        linking your localhost script to the site, along with the
+        ability to build production-level minified builds.
       </>
     ),
   },
   {
-    title: "Seamless Webflow Integration",
+    title: "First-class support for Webflow elements",
     src: require("@site/static/img/b.png").default,
     description: (
       <>
-        Integrate routing control and REST API features
-        seamlessly within Webflow, maintaining an intuitive web
-        development process.
-      </>
-    ),
-  },
-  {
-    title: "Empowerment for Efficiency",
-    src: require("@site/static/img/c.png").default,
-    description: (
-      <>
-        You're in control, simplify complex tasks, and expedite
-        project delivery with ease, ensuring efficient,
-        high-quality web app development.
+        xAtom's components, routing-based logic execution, data
+        service APIs, and the ability to scale native Webflow
+        components like nav, tab, slider, and collection list
+        make it a powerful framework for your needs.
       </>
     ),
   },
@@ -46,7 +37,7 @@ const FeatureList: FeatureItem[] = [
 
 function Feature({ title, src, description }: FeatureItem) {
   return (
-    <div className={clsx("col col--4")}>
+    <div className={clsx("col col--6")}>
       <div className="text--center">
         <img
           className={styles.featureSvg}
