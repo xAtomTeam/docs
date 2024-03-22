@@ -231,8 +231,8 @@ const config = {
                 href: "https://webflow.com/apps/detail/xattribute",
               },
               {
-                label: "xSync (Coming Soon)",
-                href: "#",
+                label: "xSync Chrome Extension",
+                href: "https://xsync.webflow.io/",
               },
             ],
             position: "left",
