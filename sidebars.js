@@ -41,6 +41,7 @@ const sidebars = {
             "reference/components/WFDynamicList",
             "reference/components/WFFormComponent",
             "reference/components/WFInvisibleForm",
+            "reference/components/WFCMSList",
             "reference/components/WFImage",
             "reference/components/WFNav",
             "reference/components/WFSlider",

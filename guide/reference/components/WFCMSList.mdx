@@ -1,0 +1,637 @@
+# WFCMSList 🆕
+
+```mdx-code-block
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+```
+
+The `WFCMSList` class offers powerful functionality for loading, filtering, sorting, and paginating collection lists without the need for page redirection or refreshing.
+
+## Getting Started
+
+**Initialization**: To begin using the `WFCMSList` class in your xAtom project, you'll first need to install the `@xatom/cmslist` package. After installation, initialize `WFCMSList` as demonstrated in the example below:
+
+### Installing the package
+
+<Tabs>
+<TabItem value="npm" label="npm" default>
+
+```bash title="Terminal"
+npm install @xatom/cmslist
+```
+
+</TabItem>
+<TabItem value="yarn" label="yarn">
+
+```bash title="Terminal"
+yarn add @xatom/cmslist
+```
+
+</TabItem>
+<TabItem value="pnpm" label="pnpm">
+
+```bash title="Terminal"
+pnpm add @xatom/cmslist
+```
+
+</TabItem>
+</Tabs>
+
+
+```typescript title="Example"
+import { WFCMSList } from "@xatom/cmslist";
+import { onReady, WFComponent, createComponent } from "@xatom/core";
+
+// Wait until the webflow page has loaded
+onReady(() => {
+  // Initialize WFCMSList with configuration object
+  const cms = new WFCMSList(".cms", {
+    numberOfItemPerPage: 10,
+    removeNativePaginationElements: true,
+  });
+
+  // Clone an item as a template
+  const itemClone = cms.getInitialItemAsTemplate();
+
+  // Update the text content of the cloned item
+  itemClone.updateTextViaAttrVar({
+    title: "Hello World",
+  });
+
+  // Create a custom item using createComponent
+  const myItem = createComponent("div");
+  myItem.setTextContent("Another Item");
+
+  // Wait for all collection items to be fetched
+  cms.onAllCollectionItemsReady(() => {
+    // Add the cloned item and the custom item to the CMS list
+    cms.addItem(itemClone, 0); // Add to zeroth index
+    cms.addItem(myItem, 1); // Add to first index
+  });
+
+  // Initialize WFComponent for the next button
+  const nextBtn = new WFComponent(".next-btn");
+
+  // Event listener for the next button to navigate to the next page
+  nextBtn.on("click", () => {
+    cms.goToNextPageIndex();
+  });
+
+  // Initialize WFComponent for the filter button
+  const filterBtn = new WFComponent(".filter-btn");
+
+  // Event listener for the filter button to apply a filter and render the list
+  filterBtn.on("click", () => {
+    cms.setFilterSortConfig({
+      filter: (item, dataset) => {
+        return dataset.title.includes("Hello");
+      },
+    });
+    cms.goToPageIndex(0);
+    cms.forceRenderList();
+  });
+
+  // Initialize WFComponent for the reset button
+  const resetBtn = new WFComponent(".reset-btn");
+
+  // Event listener for the reset button to clear the filter and render the list
+  resetBtn.on("click", () => {
+    cms.setFilterSortConfig({});
+    cms.goToPageIndex(0);
+    cms.forceRenderList();
+  });
+});
+```
+
+This example demonstrates the integration of `WFCMSList` into an xAtom project, showcasing the following features:
+
+- Waiting until all items are dynamically fetched from the collection.
+- Setting the maximum number of items per page.
+- Adding an item to the list even if it's not present in the collection.
+- Applying filters to the list and resetting the filter.
+- Obtaining a clone of the item template for customization.
+
+
+**Syntax**
+
+```typescript
+new WFCMSList(selector: string, config?: CMSListConfig);
+```
+
+### Configuration Object
+
+| Name     | Type            | Description                                                  |
+| -------- | --------------- | ------------------------------------------------------------ |
+| `config` | `CMSListConfig` | The optional configuration object for customizing the behavior of the CMS list. |
+
+`CMSListConfig` object type
+
+| Name                               | Type      | Description                                                                                                   |
+| ---------------------------------- | --------- | ------------------------------------------------------------------------------------------------------------- |
+| `numberOfItemPerPage`              | `number`  | The maximum number of items allowed per page. If set to `0`, it means infinite items per page. Default is `0`. |
+| `autoLoadAllItems`                 | `boolean` | Determines whether to automatically load all items on page load. Default is `true`.                           |
+| `removeNativePaginationElements`   | `boolean` | Determines whether to remove Webflow's native pagination buttons. Default is `true`.                          |
+| `resetIX2`                         | `boolean` | If you are using Webflow interactions on the item, set `resetIX2` to `true`. Default is `true`.              |
+
+> #### Note
+>
+> **Compatibility with `WFComponent`**
+>
+> The `WFCMSList` seamlessly extends the capabilities of the `WFComponent` class. This means that all the properties and methods available in `WFComponent` are fully compatible and can be used with `WFCMSList`. This compatibility provides you with a wide range of options for enhancing and customizing the behavior of your cms lists. Feel free to leverage the power of both components to achieve your desired results efficiently.
+
+
+## Methods
+
+The `WFCMSList` class provides a comprehensive set of properties and methods to enhance your development workflow:
+
+### `loadAllCollectionItems()` {#load-all-items}
+
+The `loadAllCollectionItems()` method in the `WFCMSList` class allows you to load all items from paginated pages and add them to the current collection. This method is useful when `autoLoadAllItems` is set to false and you need to load items manually based on some interaction.
+
+```typescript title="Example"
+// Initialize WFCMSList with autoLoadAllItems set to false
+const list = new WFCMSList(".cms", { autoLoadAllItems: false });
+
+// Load all items after a certain delay
+setTimeout(() => {
+    list.loadAllCollectionItems();
+}, 5000);
+```
+
+**Syntax**
+
+```typescript
+loadAllCollectionItems(): void;
+```
+
+---
+
+
+### `addItem(el, index)` {#add-item}
+
+The `addItem()` method in the `WFCMSList` class allows you to add a new item to the collection list at a specified index.
+
+```typescript title="Example"
+// Initialize WFCMSList
+const list = new WFCMSList(".cms");
+
+// Create a new item using WFComponent
+const newItem = new WFComponent(".new-item");
+
+// Add the new item to the collection list at index 0
+list.addItem(newItem, 0);
+```
+
+**Syntax**
+
+```typescript
+addItem(el: WFComponent, index?: number): void;
+```
+
+#### Parameters {#add-item-parameters}
+
+| Name      | Type            | Description                                    |
+| --------- | --------------- | ---------------------------------------------- |
+| `el`      | `WFComponent`   | The new item to add to the collection list.    |
+| `index?`   | `number`        | The optional index at which to add the item.   |
+
+---
+
+### `removeItem(index)` {#remove-item}
+
+The `removeItem()` method in the `WFCMSList` class allows you to remove an item from the collection list at the specified index.
+
+```typescript title="Example"
+// Initialize WFCMSList
+const list = new WFCMSList(".cms");
+
+// Remove the item at index 0 from the collection list
+list.removeItem(0);
+```
+
+**Syntax**
+
+```typescript
+removeItem(index: number): void;
+```
+
+#### Parameters {#remove-item-parameters}
+
+| Name      | Type            | Description                                   |
+| --------- | --------------- | --------------------------------------------- |
+| `index?`   | `number`        | The index of the item to be removed.         |
+
+---
+
+### `getAllItems()` {#get-all-items}
+
+The `getAllItems()` method in the `WFCMSList` class returns an array containing all items in the collection list.
+
+```typescript title="Example"
+// Initialize WFCMSList
+const list = new WFCMSList(".cms");
+
+// Get all items from the collection list
+const allItems = list.getAllItems();
+
+console.log(allItems); // Array of WFComponent<HTMLDivElement>
+```
+
+**Syntax**
+
+```typescript
+getAllItems(): WFComponent<HTMLDivElement>[];
+```
+
+---
+
+### `getItemCount()` {#get-item-count}
+
+The `getItemCount()` method in the `WFCMSList` class returns the total number of items in the collection list.
+
+```typescript title="Example"
+// Initialize WFCMSList
+const list = new WFCMSList(".cms");
+
+// Get the total number of items in the collection list
+const itemCount = list.getItemCount();
+
+console.log(itemCount); // 20
+```
+
+**Syntax**
+
+```typescript
+getItemCount(): number;
+```
+
+---
+
+### `forceRenderList()` {#force-render-list}
+
+The `forceRenderList()` method in the `WFCMSList` class forces the rendering of the collection list.
+
+```typescript title="Example"
+// Initialize WFCMSList
+const list = new WFCMSList(".cms");
+
+// Force render the collection list
+list.forceRenderList();
+```
+
+**Syntax**
+
+```typescript
+forceRenderList(): void;
+```
+
+---
+
+### `onLoadingChange(cb)` {#on-loading-change}
+
+The `onLoadingChange()` method in the `WFCMSList` class allows you to listen for changes in the loading status of the collection list.
+
+```typescript title="Example"
+// Initialize WFCMSList
+const list = new WFCMSList(".cms");
+
+// Define a callback function
+const loadingCallback = (status: boolean) => {
+  console.log("Loading status:", status);
+};
+
+// Register the callback function to listen for loading status changes
+const unregisterCallback = list.onLoadingChange(loadingCallback);
+```
+
+**Syntax**
+
+```typescript
+onLoadingChange(cb: (status: boolean) => void): () => void;
+```
+
+#### Parameters {#on-loading-change-parameter}
+
+| Name      | Type                    | Description                              |
+| --------- | ----------------------- | ---------------------------------------- |
+| `cb`      | `(status: boolean) => void` | The callback function to be invoked when the loading status changes. |
+
+#### Returns
+
+A function that can be called to unregister the callback.
+
+---
+
+### `onAllCollectionItemsReady(cb)` {#on-all-collection-items-ready}
+
+The `onAllCollectionItemsReady()` method in the `WFCMSList` class allows you to listen for the event when all collection items are ready.
+
+```typescript title="Example"
+// Initialize WFCMSList
+const list = new WFCMSList(".cms");
+
+// Define a callback function
+const itemsReadyCallback = () => {
+  console.log("All collection items are ready.");
+};
+
+// Register the callback function to listen for the event
+const unregisterCallback = list.onAllCollectionItemsReady(itemsReadyCallback);
+```
+
+**Syntax**
+
+```typescript
+onAllCollectionItemsReady(cb: () => void): () => void;
+```
+
+#### Parameters {#on-all-collection-items-ready-parameter}
+
+| Name      | Type          | Description                                |
+| --------- | ------------- | ------------------------------------------ |
+| `cb`      | `() => void`  | The callback function to be invoked when all collection items are ready. |
+
+#### Returns
+
+A function that can be called to unregister the callback.
+
+---
+
+### `getTotalPagesCount()` {#get-total-pages-count}
+
+The `getTotalPagesCount()` method in the `WFCMSList` class returns the total number of pages in the collection list.
+
+```typescript title="Example"
+// Initialize WFCMSList
+const list = new WFCMSList(".cms");
+
+// Get the total number of pages
+const totalPages = list.getTotalPagesCount();
+
+console.log("Total pages:", totalPages);
+```
+
+**Syntax**
+
+```typescript
+getTotalPagesCount(): number;
+```
+
+#### Returns
+
+The total number of pages in the collection list.
+
+---
+
+### `getCurrentPageIndex()` {#get-current-page-index}
+
+The `getCurrentPageIndex()` method in the `WFCMSList` class returns the index of the current page in the collection list.
+
+```typescript title="Example"
+// Initialize WFCMSList
+const list = new WFCMSList(".cms");
+
+// Get the index of the current page
+const currentPageIndex = list.getCurrentPageIndex();
+
+console.log("Current page index:", currentPageIndex);
+```
+
+**Syntax**
+
+```typescript
+getCurrentPageIndex(): number;
+```
+
+#### Returns
+
+The index of the current page in the collection list.
+
+---
+
+### `goToPageIndex(index)` {#go-to-page-index}
+
+The `goToPageIndex()` method in the `WFCMSList` class allows you to navigate to a specific page in the collection list.
+
+```typescript title="Example"
+// Initialize WFCMSList
+const list = new WFCMSList(".cms");
+
+// Go to the 3rd page in the collection list
+list.goToPageIndex(2);
+```
+
+**Syntax**
+
+```typescript
+goToPageIndex(index: number): void;
+```
+
+#### Parameters {#go-to-page-index-parameter}
+
+| Name      | Type     | Description                            |
+| --------- | -------- | -------------------------------------- |
+| `index`   | `number` | The index of the page to navigate to. |
+
+---
+
+### `getInitialItemAsTemplate()` {#get-initial-item-as-template}
+
+The `getInitialItemAsTemplate()` method in the `WFCMSList` class returns a template of the initial item in the collection list.
+
+```typescript title="Example"
+// Initialize WFCMSList
+const list = new WFCMSList(".cms");
+
+// Get the initial item template
+const itemTemplate = list.getInitialItemAsTemplate();
+```
+
+**Syntax**
+
+```typescript
+getInitialItemAsTemplate(): WFComponent<HTMLDivElement>;
+```
+
+#### Returns
+
+A template of the initial item in the collection list.
+
+---
+
+### `goToNextPageIndex()` {#go-to-next-page-index}
+
+The `goToNextPageIndex()` method in the `WFCMSList` class allows you to navigate to the next page in the collection list.
+
+```typescript
+// Initialize WFCMSList
+const list = new WFCMSList(".cms");
+
+// Go to the next page in the collection list
+list.goToNextPageIndex();
+```
+
+---
+
+### `goToPreviousPageIndex()` {#go-to-previous-page-index}
+
+The `goToPreviousPageIndex()` method in the `WFCMSList` class allows you to navigate to the previous page in the collection list.
+
+```typescript
+// Initialize WFCMSList
+const list = new WFCMSList(".cms");
+
+// Go to the previous page in the collection list
+list.goToPreviousPageIndex();
+```
+
+---
+
+### `setNumberOfItemsPerPage()` {#set-number-of-items-per-page}
+
+The `setNumberOfItemsPerPage()` method in the `WFCMSList` class allows you to set the number of items per page in the collection list.
+
+```typescript
+// Initialize WFCMSList
+const list = new WFCMSList(".cms");
+
+// Set the number of items per page to 10
+list.setNumberOfItemsPerPage(10);
+```
+
+**Syntax**
+
+```typescript
+setNumberOfItemsPerPage(numberOfItemsPerPage: number, pageIndex?: number): void;
+```
+
+#### Parameters {#set-number-of-items-per-page-parameter}
+
+| Name                   | Type     | Description                                     |
+| ---------------------- | -------- | ----------------------------------------------- |
+| `numberOfItemsPerPage` | `number` | The number of items to display per page.        |
+| `pageIndex`            | `number` | (Optional) The index of the page to navigate to after setting the number of items per page. If not provided, the current page remains unchanged. |
+
+
+---
+
+### `itemRenderer(cb)` {#item-renderer}
+
+The `itemRenderer()` method in the `WFCMSList` class allows you to specify a custom rendering function for each item in the collection list.
+
+```typescript
+// Initialize WFCMSList
+const list = new WFCMSList(".cms");
+
+// Define a custom item renderer function
+list.itemRenderer(({ item, index, allItems }) => {
+  // Customize the rendering of each item
+  const numberText = item.getChildAsComponent(".number-index");
+  numberText.setTextContent(`#${index + 1}`);
+  return item;
+});
+```
+
+**Syntax**
+
+```typescript
+itemRenderer(cb: (data: { item: WFComponent; index: number; allItems: WFComponent[]; }) => WFComponent): void;
+```
+
+#### Parameters {#item-renderer-parameter}
+
+| Name  | Type                                                     | Description                                                        |
+| ----- | -------------------------------------------------------- | ------------------------------------------------------------------ |
+| `cb`  | `(data: { item: WFComponent; index: number; allItems: WFComponent[]; }) => WFComponent` | The custom rendering function for each item in the collection list. |
+
+---
+
+### `setFilterSortConfig(config)` {#set-filter-sort-config}
+
+The `setFilterSortConfig()` method in the `WFCMSList` class allows you to set filter and sort configurations for the collection list.
+
+```typescript
+// Initialize WFCMSList
+const list = new WFCMSList(".cms");
+
+/**
+ * <div class="cms-item" data-category="featured" data-date="June, 08, 2023">
+ * ...
+ * </div> 
+ */
+
+// Define filter and sort configurations
+list.setFilterSortConfig({
+  // Define a filter function
+  filter: (item, datasets) => {
+    // Implement your filter logic
+    return datasets.category === "featured";
+  },
+  // Define a sort function
+  sort: (itemA, itemB) => {
+    // Implement your sort logic
+    return itemA.datasets.date.localeCompare(itemB.datasets.date);
+  },
+});
+```
+
+**Syntax**
+
+```typescript
+setFilterSortConfig(config: {
+  filter?: (item: WFComponent<HTMLElement>, datasets: { [key: string]: string; }) => boolean;
+  sort?: (itemA: { item: WFComponent<HTMLElement>; datasets: { [key: string]: string; }; }, itemB: { item: WFComponent<HTMLElement>; datasets: { [key: string]: string; }; }) => number;
+}): void;
+```
+
+#### Parameters {#set-filter-sort-config-parameter}
+
+| Name     | Type                                                                                                     | Description                                                                                   |
+| -------- | -------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| `config` | `{ filter?: (item: WFComponent<HTMLElement>, datasets: { [key: string]: string; }) => boolean; sort?: (itemA: { item: WFComponent<HTMLElement>; datasets: { [key: string]: string; }; }, itemB: { item: WFComponent<HTMLElement>; datasets: { [key: string]: string; }; }) => number; }` | The filter and sort configurations for the collection list. |
+
+##### Filter Configuration {#filter-config}
+
+| Name       | Type                                                                                     | Description                                   |
+| ---------- | ---------------------------------------------------------------------------------------- | --------------------------------------------- |
+| `filter`   | `(item: WFComponent<HTMLElement>, datasets: { [key: string]: string; }) => boolean`     | A function to filter items in the collection. |
+
+##### Sort Configuration {#sort-config}
+
+| Name       | Type                                                                                                                                              | Description                                   |
+| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------- |
+| `sort`     | `(itemA: { item: WFComponent<HTMLElement>; datasets: { [key: string]: string; }; }, itemB: { item: WFComponent<HTMLElement>; datasets: { [key: string]: string; }; }) => number`     | A function to sort items in the collection. |
+
+---
+
+### `getFilterSortConfig()` {#get-filter-sort-config}
+
+The `getFilterSortConfig()` method in the `WFCMSList` class retrieves the current filter and sort configurations for the collection list.
+
+```typescript
+// Initialize WFCMSList
+const list = new WFCMSList(".cms");
+
+// Get the current filter and sort configurations
+const config = list.getFilterSortConfig();
+
+console.log(config);
+```
+
+**Syntax**
+
+```typescript
+getFilterSortConfig(): {
+  filter?: (item: WFComponent<HTMLElement>, datasets: { [key: string]: string; }) => boolean;
+  sort?: (itemA: { item: WFComponent<HTMLElement>; datasets: { [key: string]: string; }; }, itemB: { item: WFComponent<HTMLElement>; datasets: { [key: string]: string; }; }) => number;
+};
+```
+
+#### Return Value {#get-filter-sort-config-return}
+
+| Name     | Type                                                                                                     | Description                                                                                   |
+| -------- | -------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| `filter` | `(item: WFComponent<HTMLElement>, datasets: { [key: string]: string; }) => boolean`                     | The filter function for the collection list.                                                  |
+| `sort`   | `(itemA: { item: WFComponent<HTMLElement>; datasets: { [key: string]: string; }; }, itemB: { item: WFComponent<HTMLElement>; datasets: { [key: string]: string; }; }) => number` | The sort function for the collection list.                                                    |
+
+---
